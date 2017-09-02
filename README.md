@@ -1,2 +1,5 @@
-# mopeia
-Mopeia data processing and analysis
+# Mopeia-COST
+
+Eldo Elobolobo, Joe Brew
+
+
