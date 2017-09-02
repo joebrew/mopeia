@@ -1,0 +1,411 @@
+Variable / Field Name	Form Name	Section Header	Field Type	Field Label	"Choices, Calculations, OR Slider Labels"	Field Note	Text Validation Type OR Show Slider Number	Text Validation Min	Text Validation Max	Identifier?	Branching Logic (Show field only if...)	Required Field?	Custom Alignment	Question Number (surveys only)	Matrix Group Name	Matrix Ranking?	Field Annotation
+record_id	cost_acd		text	Record ID													
+submissionDate	cost_acd		text	formsubmission Date [Auto Generated]													
+deviceid	cost_acd		text	Tablet's id [Auto Generated]													
+start	cost_acd		text	Time the survey starts [Auto Generated]													
+end	cost_acd		text	Time the survey ends [Auto Generated]													
+hw_id	cost_acd		text	Codigo do inquiridor			number	0				y					
+fw_name	cost_acd		text	Nome do Inquiridor								y					
+family_id	cost_acd		text	2. Numero do agregado		XXX-XXXX-XXX				y		y					
+dob	cost_acd		text	3. Data de nascimento			date_dmy					y					
+acd_gender	cost_acd		radio	4. Sexo	"1, Masculino | 2, Femenino"												
+acd_visit_date	cost_acd		text	5. Data da visita			date_dmy					y					
+consent	cost_acd		radio	6. Assinou o consentimento informado?	"1, Sim | 2, Nao"							y					
+consent_whynot	cost_acd		text	"7. Se Não, Porque? Especifique"								y					
+education	cost_acd		radio	8. Nível académico	"1, Alfabetização | 2, EP1 | 3, EP2 | 4, ESG1 | 5, ESG2 | 6, Pre-básico elementar | 7, Técnico básico | 8, Técnico médio | 9, Formado como professor da primaria | 10, Superior"												
+read	cost_acd		radio	9. Sabe Ler?	"1, Sim | 2, Não"												
+write	cost_acd		radio	10. Sabe escrever?	"1, Sim | 2, N�o | 3, N�o responde"												
+ocupation	cost_acd		radio	11. Ocupação do chefe da família	"1, Domestico | 2, Agricultor | 3, Agricultor remunerado | 4, Estudante | 5, Comerciante | 6, Provedor de serviços | 7, Outro | 8, NA"	(NA se e aplicável)						y					
+mstatus	cost_acd		radio	12. Estado Civil dos pais/cuidador	"1, Casados ou em união de facto | 2, Solteiro | 3, Separado/Divorciado | 4, Viúvo/a | 5, Nunca casou ou viveu conjugalmente"							y					
+together	cost_acd		radio	"13. Se for casado, mora com o seu parceiro?"	"1, Sim | 2, Ocasionalmente | 3, Não"												
+water	cost_acd		radio	"14. Qual é a principal fonte de água de consumo da família?
+"	"1, Agua canalizada | 2, Poço cavado | 3, Agua de chuva | 4, Camião tanque | 5, Água da superficie (Lago/lagoa/riacho/canal) | 6, Agua engarafada | 7, Outro"							y					
+water_channel	cost_acd		radio	Agua Canalizada	"11, Canalizada dentro da vivenda | 12, Canalizada para o quintal | 13, Casa do vizinho | 14, Torneira publica/fontenaria"												
+water_well	cost_acd		radio	Poço cavado	"21, Poço protegido | 22, Poço desprotegido | 23, Furo com bomba manual"												
+waterloc	cost_acd		radio	15. Onde esta localizada a fonte de água?	"1, Na própria vivenda | 2, No próprio quintal | 3, Em outro lugar"							y					
+time_taken	cost_acd		text	"16. Se esta fora do quintal, quanto tempo, de ida e volta, leva para ir buscar a agua?
+"		"Digite ""99"" se não sabe"	integer	0	99			y					
+watertreat	cost_acd		radio	17. Faz alguma coisa para tornar a água mais potável para o consumo?	"1, Sim | 2, Não | 3, Não sabe"							y					
+latrine	cost_acd		radio	18. Qual é o tipo de latrina que a família usa?	"1, Sanita | 2, Sem sanita | 3, Latrina melhorada | 4, Latrina tradicional melhorada | 5, Sem latrina melhorada | 6, Sem latrina / no mato | 7, Outro"							y					
+especif_a	cost_acd		text	Especifique								y					
+latrine_shared	cost_acd		radio	19. Compartilham a latrina com outras famílias?	"1, Sim | 2, Não | 3, Não sabe"							y					
+wc_familyno	cost_acd		radio	20. Quantas famílias usam essa latrina?	"1, 0-5 | 2, 5-10 | 3, 10 ou mais | 4, Não"							y					
+hh_appliance	cost_acd		checkbox	21. A sua família tem os seguintes electrodomésticos?	"1, Energia eléctrica | 2, Radio | 3, Televisão | 4, Telemóvel | 5, Sem telemóvel | 6, Frigorífico"	Marque todos que se aplicam						y					
+fuel	cost_acd		radio	"22. Qual é o principal combustível que a sua família usa para confeccionar os alimentos?
+"	"1, Energia electrica | 2, Gas natural | 3, Gas de petroleo liquefeito | 4, Carvao | 5, Carvao vegetal | 6, Lenha | 7, Estrume de animais | 8, Não cozinha em casa | 9, Outro"							y					
+especif_b	cost_acd		text	Especifique													
+alconfec	cost_acd		radio	23. Onde é que a família geralmente confecciona os alimentos?	"1, Dentro de casa | 2, No outro edifício | 3, Ar livro | 4, Outro"							y					
+especif_c	cost_acd		text	Especifique													
+ground	cost_acd		radio	"24. Por favor, indique o material que compõe o chão da casa principal.
+"	"1, Terra batida | 2, Não terra batida | 3, Madeira rudimentar | 4, Adobe | 5, Parquet ou madeira serrada | 6, Azulejo | 7, Cimento | 8, Outro"							y					
+especif_d	cost_acd		text	Especifique													
+roof	cost_acd		radio	"25. Por favor, indique o material que compõe o telhado da casa principal."	"1, Sem telhado/descoberto | 2, Capim/colmo/palmeira | 3, Chapas de zinco | 4, Folhas de fibrocimento | 5, Azulejo | 6, Lajes de concreto | 7, Outro"							y					
+especif_e	cost_acd		text	Especifique													
+wall	cost_acd		radio	"26. Por favor, indique o material que compõe as paredes da casa principal."	"1, Sem paredes | 2, Caniço / paus / bambu / palmeira | 3, Latão / papelão / papel / sacos | 4, Paus maticados de areia | 5, Casca de árvore | 6, Madeira / zinco | 7, Tijolos de argila | 8, Azulejo | 9, Blocos de cimento | 10, Outro"							y					
+especif_f	cost_acd		text	Especifique													
+rooms	cost_acd		text	Quantos quartos são usados para dormir?			integer	0	10			y					
+possess	cost_acd		checkbox	"28. Algum membro da família possui o seguinte:
+"	"1, Relógio | 2, Bicicleta | 3, Motorizada ou motocicleta | 4, Carro de tracção animal | 5, Veiculo ligeiro ou caminhão | 6, Barco a motor | 7, Nenhum"							y					
+land_cultiv	cost_acd		radio	29. A família possui alguma terra para cultivo?	"1, Sim | 2, Não | 3, Não sabe"							y					
+land_cultiv_dim	cost_acd		text	30. Quantos hectares de terra arável a família possui?		"Se nao/nenhum escreva ""00"",Se sao 95 ou mais escreva ""95"", Se nao sabe, escreva ""99"""	integer	0	99			y					
+animals	cost_acd		radio	"31. Esta família possui gado, rebanhos, outros animais de campo ou aves de capoeira?"	"1, Sim | 2, Não | 3, Não sabe"							y					
+cattle	cost_acd		text	Gado		"Digite ""99"" se não sabe"	number	0	99		[animals] = '1'						
+horse	cost_acd		text	"Cavalos, burros ou mulas"		"Digite ""99"" se não sabe"	number	0	99		[animals] = '1'						
+coats	cost_acd		text	Cabras		"Digite ""99"" se não sabe"	number	0	99		[animals] = '1'						
+sheep	cost_acd		text	Ovelhas		"Digite ""99"" se não sabe"	number	0	99		[animals] = '1'						
+pigs	cost_acd		text	Porcos		"Digite ""99"" se não sabe"					[animals] = '1'						
+chick	cost_acd		text	Galinhas		"Digite ""99"" se não sabe"	number	0	99		[animals] = '1'						
+bank_acc	cost_acd		radio	33. Algum membro da família tem conta bancaria?	"1, Sim | 2, Não | 3, Não sabe"							y					
+spray	cost_acd		radio	34. Esta casa foi pulverizada nos últimos 12 meses?	"1, Sim | 2, Não | 3, Não sabe"							y					
+w_spray	cost_acd		radio	"35. Se não, Porquê?
+"	"1, A equipe não veio | 2, Ninguem estava em casa | 3, Recusou | 4, Não sabe/outros"												
+spray_date	cost_acd		text	"36. Data da última pulverização
+"			date_dmy										
+has_nets	cost_acd		radio	"37. A casa tem redes mosquiteira que usam quando dormem?
+"	"1, Sim | 2, Não | 3, Não sabe"							y					
+nets	cost_acd		text	38. Quantas redes?		"Digite ""99"" se não sabe"	number	1	10								
+outs_sleep	cost_acd		radio	"50. Em geral, com que frequência a criança dorme ao ar livre durante a estação chuvosa?"	"1, Menos de uma vez por semana | 2, Uma vez por semana | 3, 2 ou 3 vezes por semana | 4, 4 ou mais vezes por semana | 5, Nao sabe"							y					
+out_sleep	cost_acd		radio	"51. Em geral, com que frequência a criança dorme ao ar livre durante a estação seca?
+"	"1, Menos de uma vez por semana | 2, Uma vez por semana | 3, 2 ou 3 vezes por semana | 4, 4 ou mais vezes por semana | 5, Nao sabe"							y					
+osleepreason	cost_acd		radio	"52. Se dorme  no ar livre, qual é o motivo?
+"	"1, Calor | 2, Outra razao"							y					
+undernet_sleep	cost_acd		radio	"53. Com que frequência a criança dorme debaixo da rede durante a estação chuvosa?
+"	"1, Menos de uma vez por semana | 2, Uma vez por semana | 3, 2 ou 3 vezes por semana | 4, 4 ou mais vezes por semana | 5, Nao sabe"							y					
+undernet_sleeps	cost_acd		radio	"54. Com que frequência a criança dorme debaixo da rede durante a estação seca?
+"	"1, Menos de uma vez por semana | 2, Uma vez por semana | 3, 2 ou 3 vezes por semana | 4, 4 ou mais vezes por semana | 5, Nao sabe"							y					
+medidas	cost_acd		radio	"55. Usou algumas das seguintes medidas durante a última semana?
+"	"1, Espirais | 2, Repelente | 3, Insecticidas(Baygon) | 4, Nenhum"							y					
+custotech	cost_acd		text	"56. Se sim, quanto pagou?
+"		"""000 ""se foi gratis"						y					
+parent_uri	cost_acd_children		text	Parent uri													
+perm_id	cost_acd_children		text	Numero do participante de estudo													
+had_malaria	cost_acd_children		radio	"57. A criança teve malária nos últimos 30 dias?
+"	"1, Sim | 2, Não | 3, Não sabe"							y					
+dsickness	cost_acd_children		radio	"58. a) Quem ajudou a diagnosticar a doença da criança?
+"	"1, Curandeiro | 2, Um parente | 3, Pessoal de saúde | 4, Outro"												
+diagnostic	cost_acd_children		radio	"58. b)  Como é que foi diagnosticado?
+"	"1, Exame medico | 2, Febre | 3, Outros sintomas"							y					
+healer	cost_acd_children		radio	59. Procuram atendimento num curandeiro?	"1, Sim | 2, Não | 3, Não sabe"							y					
+healer_cons_cost	cost_acd_children		text	60. Quanto é que custou a consulta?			number					y					
+healer_visit_nr	cost_acd_children		text	"61. Quantas vezes a sua família visitou o curandeiro?
+"								y					
+healer_mater_cost	cost_acd_children		text	62. Quanto custaram os materiais?			number					y					
+healer_trav_cost	cost_acd_children		text	"63. Quanto custaram as despesas da viagem?(ida)
+"								y					
+ape_search	cost_acd_children		radio	64. Procuraram atendimento no APE?	"1, Sim | 2, Não | 3, Não sabe"							y					
+ape_cons_cost	cost_acd_children		text	65. Quanto custou a consulta?			number					y					
+ape_test_cost	cost_acd_children		text	66. Quanto custou o teste?			number					y					
+ape_treat_cost	cost_acd_children		text	67. Quanto custou o tratamento?			number					y					
+hf_attend	cost_acd_children		radio	68. Procuraram atendimento numa unidade sanitária?	"1, Sim | 2, Não | 3, Não sabe"							y					
+heath_unit	cost_acd_children		dropdown	"69. Se sim, qual foi a unidade sanitária?
+"	"1, Centro de saúde de Mopeia Sede | 2, Centro de saúde de Sangalaza | 3, Centro de saúde de 8 de Marco | 4, Centro de saúde de Gulamo | 5, Centro de saúde de Chimuara | 6, Centro de saúde de Noere | 7, Centro de saúde de Nhacatundo | 8, Centro de saúde de Nzanza | 9, Centro de saúde de Lualua | 10, Centro de saúde de Posto Campo | 11, Centro de saúde de Catale | 12, Centro de saúde de Mungane | 13, Outro"							y					
+hf_trav_cost	cost_acd_children		text	"70. Quanto custaram as despesas da viagem? (ida)
+"			number					y					
+hf_trav_time	cost_acd_children		text	"71. Quanto tempo demorou para chegar a Unidade Sanitária? (minutos)
+"			number	0				y					
+hf_cons_cost	cost_acd_children		text	72. Quanto custou a consulta?			number										
+hf_test_cost	cost_acd_children		text	"73. Quanto custou o teste?
+"			number					y					
+hf_treat_cost	cost_acd_children		text	74. Quanto custou o tratamento?			number										
+hospitalized	cost_acd_children		text	75.  A criança chegou de ser hospitalizada?								y					
+hosp_days	cost_acd_children		text	"76. Se sim, quantos dias?"			number	0									
+hosp_call_cost	cost_acd_children		text	77. Quanto é que gastaram em chamadas durante a hospitalização?			number	0				y					
+hosp_feed_cost	cost_acd_children		text	"78. Quanto é que gastaram em alimentação durante a hospitalização?
+"			number	0									
+hosp_trav_cost	cost_acd_children		text	Quanto custaram as despesas da viagem? (ida)													
+hosp_bill	cost_acd_children		text	"79. Alguma Outra despesa?
+"								y					
+hosp_bill_cost	cost_acd_children		text	80. Qual foi o custo da tal despesa?			number	0				y					
+medcost	cost_acd_children		text	81. Quanto é que foi pago pelos medicamentos depois do participante ter voltado para casa?			number										
+agriculture	cost_acd_children		radio	"82. Agricultura, pesca, mineração"	"1, Sim | 2, Não"							y					
+agriculture_time	cost_acd_children		text	"Por favor, escreva o número de horas diárias perdidas para cada actividade durante o episódio da malária"			integer					y					
+industry	cost_acd_children		radio	"84. Indústria alimentar ou outras indústrias
+"	"1, Sim | 2, Não"							y					
+industry_time	cost_acd_children		text	"Por favor, escreva o número de horas diárias perdidas para cada actividade durante o episódio da malária"			integer					y					
+commercy	cost_acd_children		radio	Comércio / Mercado	"1, Sim | 2, Não"							y					
+commercy_time	cost_acd_children		text	"Por favor, escreva o número de horas diárias perdidas para cada actividade durante o episódio da malária"			integer					y					
+services	cost_acd_children		radio	"86. Serviços (restaurantes, hotéis, etc.)
+"	"1, Sim | 2, Não"							y					
+services_time	cost_acd_children		text	"Por favor, escreva o número de horas diárias perdidas para cada actividade durante o episódio da malária"			integer					y					
+admin	cost_acd_children		radio	"87. Administração pública e defesa
+"	"1, Sim | 2, Não"							y					
+admin_time	cost_acd_children		text	"Por favor, escreva o número de horas diárias perdidas para cada actividade durante o episódio da malária"			integer					y					
+education_work	cost_acd_children		radio	88. Trabalho na educação	"1, Sim | 2, Não"							y					
+education_work_time	cost_acd_children		text	"Por favor, escreva o número de horas diárias perdidas para cada actividade durante o episódio da malária"			integer					y					
+hosp_work	cost_acd_children		radio	89. Trabalho em serviços sanitários e sociais	"1, Sim | 2, Não"							y					
+hosp_work_time	cost_acd_children		text	"Por favor, escreva o número de horas diárias perdidas para cada actividade durante o episódio da malária"			integer					y					
+home_work	cost_acd_children		radio	Trabalho doméstico/cuidade de crianças	"1, Sim | 2, Não"							y					
+home_work_time	cost_acd_children		text	"Por favor, escreva o número de horas diárias perdidas para cada actividade durante o episódio da malária"			integer					y					
+study	cost_acd_children		radio	Estudos	"1, Sim | 2, Não"							y					
+rdperson_payment	cost_acd_children		radio	"Teve que pagar alguém, fazer tais actividades, enquanto você cuidava do filho?"	"1, Sim | 2, Não"							y					
+payment_value	cost_acd_children		text	Quanto é que pagou?			integer					y					
+temp	cost_acd_children		text	Temperatura axilar								y					
+child_fever	cost_acd_children		radio	A criança  teve febre nas últimas 48 horas?	"1, Sim | 2, Não | 3, Não sabe"							y					
+child_med	cost_acd_children		radio	A criança recebeu antimaláricos nos ultimos 30 dias?	"1, Sim | 2, Não | 3, Não sabe"							y					
+acd_anti_malaric	cost_acd_children		checkbox	"Se sim, qual?"	"1, CoArtem | 2, Artesunato | 3, Fansidar | 4, Amodiaquina | 5, Quinina | 6, Não sabe | 7, Outro"												
+especif	cost_acd_children		text	Especifique								y					
+child_vacin	cost_acd_children		radio	Essa criança recebeu todas as vacinas do Epl para sua idade?	"1, Sim | 2, Não | 3, Não sabe"							y					
+test_result	cost_acd_children		radio	Resultados dos testes rápidos de malária	"1, Positivo | 2, Negativo | 3, Inválido | 4, Não feito"												
+treat_follow	cost_acd_children		radio	"Se o teste rápido de malária foi positivo, cumpriu de forma adequada com o tratamento?"	"1, Sim | 2, Não"							y					
+why_treatment	cost_acd_children		radio	"Se não, porquê?"	"1, Recusou | 2, O participante recebeu um tratamento completo de antimaláricos nos últimos 15 dias e desde então tem tido febre | 3, Outro"												
+spec	cost_acd_children		text	Especifique													
+hf_id	cost_pcd		text	Código do Centro de Saude			number	0	13	y		y					
+hf_fw_id	cost_pcd		text	Código do Trabalhador Sanitario			integer	0	127	y		y					
+visit_date	cost_pcd		text	Data			date_dmy	12/12/2016	12/12/2020	y		y					
+gender	cost_pcd		radio	Sexo	"1, Masculino | 2, Femenino"					y		y					
+locality	cost_pcd		text	Localidade			integer	0	13	y		y					
+village	cost_pcd		text	Bairro			integer	7000	7999	y		y					
+age	cost_pcd		radio	Idade (Anos)	"1, 0 a 4 Anos | 2, 5 a 15 Anos | 3, >15 Anos"					y		y					
+diagnostics	cost_pcd		radio	Diagnostico	"1, Malaria | 2, Sem Malaria"					y		y					
+tdr	cost_pcd		radio	Fez teste usando TDR?	"1, Sim | 2, Nao"					y		y					
+tdr_res	cost_pcd		radio	Qual foi o resultado do teste?	"1, Positivo | 2, Negativo"					y		y					
+htz	cost_pcd		radio	Fez teste usando HTZ?	"1, Sim | 2, Nao"					y		y					
+htz_res	cost_pcd		radio	Qual foi o resultado?	"1, Positivo | 2, Negativo"					y		y					
+anti_malaric	cost_pcd		radio	Fez tratamento anti-malarico	"1, Sim | 2, Nao"					y		y					
+drug	cost_pcd		radio	Selecione o anti-malarico	"1, ALU (Coartem,Arteméter-lumefantrina) | 2, AS-IV (Artesunato) | 3, QUI (Quinino) | 4, Outro"												
+drug_spec	cost_pcd		text	Especifique								y					
+other_anti_malaric	cost_pcd		radio	Fez outro tratamento diferente do anti-malarico?	"1, Sim | 2, Nao"					y		y					
+source	cost_pcd		radio	Regime	"1, Externo | 2, Hospitalizado"					y		y					
+intern_date	cost_pcd		text	Data de admissao			date_ymd			y		y					
+discharge_date	cost_pcd		text	Data da Alta			date_ymd					y					
+outcome	cost_pcd		radio	Resultado	"1, Melhoria | 2, Obito"							y					
+bn_parent_uri	bednet		text	Parent URI													
+brand	bednet		radio	39. Observe o tipo de marca da rede mosquiteira:	"1, Olyset | 2, Permanet | 3, Netprotect | 4, Duranet | 5, Interceptor | 6, DawaPlus | 7, Nao sabe | 8, Outro"							y					
+specify	bednet		text	Especifique													
+hole	bednet		radio	"40. Observe a rede por todos os lados. Tem furos maiores do que a ponta do seu polegar?
+"	"1, Sim | 2, Não"												
+location	bednet		radio	41. Onde está a rede?	"1, Pendurada, arrumado | 2, Nao pendurado, nao arrumado | 3, Nao pendurado, mas acessivel | 4, Nao pendurado, e nao acessivel | 5, Outro"												
+acquisition	bednet		radio	42. Como é que obteve a rede	"1, Comprou | 2, Campanha de distribuicao na provincia/distrito | 3, Campanha de vacinacao | 4, Na clinica | 5, Nao sabe"												
+cost	bednet		text	"Se comprou, quanto custou?"													
+host	bednet		radio	44. Quantos dormiram nessa rede na noite passada?	"1, 1 | 2, 2 | 3, 3 | 4, Mais de 3 | 5, Nao sabe"												
+sleepers	bednet		radio	45. Quem dormiu nessa rede na noite passada?	"1, Crianças | 2, Adultos | 3, Adultos e Crianças | 4, Nao sabe"												
+treatment	bednet		radio	"46. Quando adquiriu a rede ela tinha sido tratada com insecticida?
+"	"1, Sim | 2, Não | 3, Não sabe"												
+treatment_again	bednet		radio	47. Voltou a tratar a rede novamente?	"1, Sim | 2, Não | 3, Não sabe"												
+treatment_last	bednet		radio	"48. Se sim, quando foi a ultima vez?"	"1, Menos de 6 meses | 2, 6 a 12 meses | 3, Mais de 1 ano | 4, Nao sabe"												
+wash	bednet		radio	49. Já lavou a rede desde que a obteve?	"1, Sim | 2, Não"												
+fufw_id	cost_acd_followup		text	Codigo do Inquiridor						y		y					
+fufw_name	cost_acd_followup		text	Nome do Inquiridor						y		y					
+fufamily_id	cost_acd_followup		text	2. Numero do Agregado		XXX-XXXX-XXX						y					
+fudob	cost_acd_followup		text	3. Data de Nascimento			date_dmy					y					
+fugender	cost_acd_followup		radio	4. Sexo	"1, Masculino | 2, Femenino"							y					
+fuvisit_date	cost_acd_followup		text	5.Data da visita			date_dmy	2/1/2017				y					
+fuconsent	cost_acd_followup		radio	6. Retirou o consentimento de participa��o?	"1, Sim | 2, Nao"							y					
+consent_why	cost_acd_followup		text	"7. Se retirou, porque?"		"Se retirou, parar de preencher o inquerito"											
+paint	cost_acd_followup		radio	8. Rebocou ou pintou a sua casa no ultimo mes?	"1, Sim | 2, Nao | 3, Nao Sei"							y					
+net_sleepun	cost_acd_followup		radio	9. O participante dormiu debaixo da rede na �ltima noite?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+net_hole	cost_acd_followup		radio	10. Observe a rede por todos os lados. Tem furos maiores do que a ponta do seu polegar?	"1, Sim | 2, Nao"							y					
+net_loc	cost_acd_followup		radio	11. Onde esta a rede?	"1, Pendurada, arrumado | 2, Nao pendurado, nao arrumado | 3, Nao pendurado, mas acessivel | 4, Nao pendurado, e nao acessivel | 5, Outro"							y					
+net_wash	cost_acd_followup		radio	12. Lavou  a rede a minha �ltima visita?	"1, Sim | 2, Nao"							y					
+washnr	cost_acd_followup		radio	"13. Se sim, quantas vezes?"	"1, 1 | 2, 2 | 3, 3 | 4, Mais de 3 | 5, Nao sei"							y					
+precaution	cost_acd_followup		radio	14. Usou alguma das seguintes medidas durante a �ltima semana?	"1, Espirais | 2, Repelentes | 3, Insecticida(Baygon) | 4, Nenhum"							y					
+precaution_cost	cost_acd_followup		text	"15. Se sim, quanto pagou?"		000 se foi gratis	number	0	1000			y					
+fu_child_auri	fu_childs		text	parent auri													
+fuperm_id	fu_childs		text	1. Numero de Participante		XXX-XXXX-XXX-XXXX				y		y					
+fuhad_malaria	fu_childs		radio	16. A crianca teve malaria nos ultimos 30 dias?	"1, Sim | 2, Nao | 3, Nao sabe"												
+diagnostic_person	fu_childs		radio	17. a) Quem ajudou a diagnosticar a doen�a da crian�a?	"1, Curandeiro | 2, Um parente experiente | 3, Pessoal de saude | 4, Outro"							y					
+diagnostic_type	fu_childs		radio	17. b) Como e que foi diagnosticado?	"1, Exame medico | 2, Febre | 3, Outros sintomas"							y					
+trad	fu_childs		radio	18. Procuraram atendimento num curandeiro? 	"1, Sim | 2, Nao | 3, Nao sei"							y					
+trad_con_cost	fu_childs		text	19. Quanto e que custou a consulta?			number	0	100			y					
+trad_trad_visitno	fu_childs		text	20. Quantas vezes a sua fam�lia visitou o curandeiro? 			number	0	30			y					
+trad_material_cost	fu_childs		text	21. Quanto custaram os materiais?			number	0									
+trad_travel_cost	fu_childs		text	22. Quanto custaram as despesas da viagem?		apenas ida.	number	0				y					
+comty	fu_childs		radio	23. Procuram atendimento no respons�vel sanit�rio da comunidade?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+comty_cons_cost	fu_childs		text	24. Quanto custou a consulta?			number	0				y					
+comty_test_cost	fu_childs		text	25. Quanto custou o teste?			number	0				y					
+comty_treat_cost	fu_childs		text	26. Quanto custou o tratamento?			number	0									
+fuhf_attend	fu_childs		radio	27. Procuraram atendimento numa unidade sanit�ria?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+fu_health_unit	fu_childs		dropdown	"28. Se sim, qual foi a unidade sanit�ria?"	"1, Centro de saude de Mopeia Sede | 2, Centro de saude de 8 de Marco | 3, Centro de sa�de Gulamo | 4, Centro de sa�de Sangalaza | 5, Centro de sa�de Chimuara | 6, Centro de sa�de Noere | 7, Centro de sa�de Nhacatundo | 8, Centro de sa�de Nzanza | 9, Centro de sa�de Lualua | 10, Centro de sa�de Posto Campo | 11, Centro de sa�de Catale | 12, Centro de sa�de Mungane | 13, Outro centro de sa�de"							y					
+hf_bills	fu_childs		text	29. Quanto custaram as despesas da viagem?		apenas a viagem de ida	number	0				y					
+hf_time_dur	fu_childs		text	30. Quanto tempo demorou para chegar a unidade sanit�ria?		Minutos	number	0				y					
+hf_atend_cost	fu_childs		text	31. Quanto custou a consulta?			number	0									
+fuhf_test_cost	fu_childs		text	32. Quanto custou o teste?			number	0				y					
+fuhf_treat_cost	fu_childs		text	33. Quanto custou o tratamento?			number	0				y					
+intern	fu_childs		text	34. A crianca chegou de ser hospitalizada?			number	0				y					
+days_no	fu_childs		text	"35. Se sim, quantos dias?"			number	0				y					
+fucost	fu_childs		text	36. Quanto e que gastaram com chamadas durante a hospitaliza��o?			integer	0				y					
+feeding_cost	fu_childs		text	37. Quanto gastaram em alimenta��o  durante a hospitaliza��o?			number	0				y					
+expense	fu_childs		radio	38. Alguma outra despesa?	"1, Sim | 2, Nao"							y					
+spec_expense	fu_childs		text	38. Especifique			number					y					
+expense_cost	fu_childs		text	39. Quanto gastaram com a outra despesa?													
+cost_after_intern	fu_childs		text	40. Quanto foi pago pelos medicamentos depois do participante ter voltado para casa?								y					
+fuagriculture	fu_childs		radio	"41. Agricultura, pesca mineracao?"	"1, Sim | 2, Nao"							y					
+fuagriculture_time	fu_childs		text	"41. Agricultura, pesca, mineracao"		"Escreva o n�mero de horas diarias perdidas para Agricultura, pesca ou minera��o durante o episodio da malaria!"	number	0				y					
+fuindustry	fu_childs		radio	"42. Ind�stria, alimentar ou outras ind�strias"	"1, Sim | 2, Nao"							y					
+fuindustry_time	fu_childs		text	42. Ind�stria alimentar ou outras ind�strias		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!						y					
+fucommercy	fu_childs		radio	43. Comercio/Mercado?	"1, Sim | 2, Nao"							y					
+fucommercy_time	fu_childs		text	43. Comercio/Mercado		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!	number	0				y					
+fuservices	fu_childs		radio	"44. Servi�os (restaurantes, hot�is, etc) ?"	"1, Sim | 2, Nao"							y					
+fuservices_time	fu_childs		text	"44. Servi�os (restaurantes, hot�is, etc)"		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!	number	0				y					
+fuadmin	fu_childs		radio	45. Administracao publica e defesa?	"1, Sim | 2, Nao"							y					
+fuadmin_time	fu_childs		text	45. Administracao publica e defesa:		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!						y					
+fueducation_work	fu_childs		radio	46. Trabalho na educacao	"1, Sim | 2, Nao"							y					
+fueducation_time	fu_childs		text	46. Trabalho na educa��o:		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!						y					
+fuhosp_work	fu_childs		radio	47. Trabalho em servi�os sanit�rios e sociais? 	"1, Sim | 2, Nao"							y					
+fuhosp_work_time	fu_childs		text	47. Trabalho em servi�os sanit�rios e sociais:		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!						y					
+dohome_work	fu_childs		radio	48. Trabalho domestico/cuidado de criancas?	"1, Sim | 2, Nao"							y					
+fuhome_work_time	fu_childs		text	48. Trabalho domestico/cuidado de criancas:								y					
+fustudy	fu_childs		radio	49. Estudos?	"1, Sim | 2, Nao"							y					
+fustudy_time	fu_childs		text	49. Estudos:								y					
+furdperson_payment	fu_childs		radio	"50. Teve que pagar algu�m, para fazer tais actividades, enquanto voc� cuidava do seu filho? "	"1, Sim | 2, Nao"							y					
+fupayment_value	fu_childs		text	51. Quanto e que pagou?								y					
+ax_temp	fu_childs		text	52. Temperatura axilar:		99.9 se nao foi valido						y					
+fever_detec	fu_childs		radio	53. A crianca teve febre nas ultimas 48 horas?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+ranti_malarians	fu_childs		radio	54. A crianca recebeu antimal�ricos nos �ltimos 30 dias?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+drugs	fu_childs		checkbox	"56. Se sim, qual?"	"1, CoArtem | 2, Artesunato | 3, Quinino | 4, Fansidar | 5, Amodiaquina | 6, Nao sei | 7, Outro"	"Se for crianca, verifique no cart�o amarelo"						y					
+drug_specify	fu_childs		text	Especifique								y					
+vacins	fu_childs		radio	57. A crianca recebeu todas as vacinas do PAV para sua idade?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+futest_result	fu_childs		radio	58. Resultados dos testes rapidos de malaria	"1, Positivo | 2, Negativo | 3, Invalido | 4, Nao Feito"							y					
+positive_test	fu_childs		radio	"59. Se o teste rapido de malaria foi positivo, cumpriu com o tratamento de forma adequada?"	"1, Sim | 2, Nao"							y					
+why_not	fu_childs		radio	"60. Se nao, porque?"	"1, Recusou? | 2, O participante recebeu um tratamento completo de antimal�ricos nos �ltimos 15 dias e desde entao nao tem tido febre | 3, Outro"							y					
+spec_why_not	fu_childs		text	Especifique								y					
+perm_id_cross	cross		text	1. N�mero de participante de estudo								y					
+hw_id_cross	cross		text	Codigo do inquiridor			number	0				y					
+fw_name_cross	cross		text	Nome do Inquiridor								y					
+family_id_cross	cross		text	2. Numero do agregado		XXX-XXXX-XXX				y		y					
+dob_cross	cross		text	3. Data de nascimento			date_dmy					y					
+gender_cross	cross		radio	4. Sexo	"1, Masculino | 2, Femenino"												
+visit_date_cross	cross		text	5. Data da visita			date_dmy					y					
+consent_cross	cross		radio	6. Assinou o consentimento informado?	"1, Sim | 2, Nao"							y					
+consent_whynot_cross	cross		text	"7. Se Não, Porque? Especifique"								y					
+education_cross	cross		radio	8. Nível académico	"1, Alfabetização | 2, EP1 | 3, EP2 | 4, ESG1 | 5, ESG2 | 6, Pre-básico elementar | 7, Técnico básico | 8, Técnico médio | 9, Formado como professor da primaria | 10, Superior"												
+read_cross	cross		radio	9. Sabe Ler?	"1, Sim | 2, N�o | 3, N�o responde"												
+write_cross	cross		radio	10. Sabe escrever?	"1, Sim | 2, N�o | 3, N�o responde"												
+ocupation_cross	cross		radio	11. Ocupação do chefe da família	"1, Domestico | 2, Agricultor | 3, Agricultor remunerado | 4, Estudante | 5, Comerciante | 6, Provedor de serviços | 7, Outro | 8, NA"	(NA se e aplicável)						y					
+mstatus_cross	cross		radio	12. Estado Civil dos pais/cuidador	"1, Casados ou em união de facto | 2, Solteiro | 3, Separado/Divorciado | 4, Viúvo/a | 5, Nunca casou ou viveu conjugalmente"							y					
+together_cross	cross		radio	"13. Se for casado, mora com o seu parceiro?"	"1, Sim | 2, Ocasionalmente | 3, Não"												
+water_cross	cross		radio	"14. Qual é a principal fonte de água de consumo da família?
+"	"1, Agua canalizada | 2, Poço cavado | 3, Agua de chuva | 4, Camião tanque | 5, Água da superficie (Lago/lagoa/riacho/canal) | 6, Agua engarafada | 7, Outro"							y					
+especif_waterfont_cross	cross		text	Especifique													
+water_channel_cross	cross		radio	Local da agua Canalizada	"11, Canalizada dentro da vivenda | 12, Canalizada para o quintal | 13, Casa do vizinho | 14, Torneira publica/fontenaria"												
+water_well_cross	cross		radio	Po�o cavado	"21, Po�o protegido | 22, Po�o desprotegido | 23, Furo com bomba manual"												
+waterloc_cross	cross		radio	15. Onde esta localizada a fonte de água?	"1, Na própria vivenda | 2, No próprio quintal | 3, Em outro lugar"							y					
+time_taken_cross	cross		text	"16. Se esta fora do quintal, quanto tempo, de ida e volta, leva para ir buscar a agua?
+"		"Digite ""99"" se não sabe"	integer	0	99			y					
+watertreat_cross	cross		radio	17. Faz alguma coisa para tornar a água mais potável para o consumo?	"1, Sim | 2, Não | 3, Não sabe"							y					
+latrine_cross	cross		radio	18. Qual é o tipo de latrina que a família usa?	"1, Sanita | 2, Sem sanita | 3, Latrina melhorada | 4, Latrina tradicional melhorada | 5, Sem latrina melhorada | 6, Sem latrina / no mato | 7, Outro"							y					
+especif_a_cross	cross		text	Especifique								y					
+latrine_shared_cross	cross		radio	19. Compartilham a latrina com outras famílias?	"1, Sim | 2, Não | 3, Não sabe"							y					
+wc_familyno_cross	cross		radio	20. Quantas famílias usam essa latrina?	"1, 0-5 | 2, 5-10 | 3, 10 ou mais | 4, Não"							y					
+hh_appliance_cross	cross		checkbox	21. A sua família tem os seguintes electrodomésticos?	"1, Energia eléctrica | 2, Radio | 3, Televisão | 4, Telemóvel | 5, Sem telemóvel | 6, Frigorífico"	Marque todos que se aplicam						y					
+fuel_cross	cross		radio	"22. Qual é o principal combustível que a sua família usa para confeccionar os alimentos?
+"	"1, Energia electrica | 2, Gas natural | 3, Gas de petroleo liquefeito | 4, Carvao | 5, Carvao vegetal | 6, Lenha | 7, Estrume de animais | 8, Não cozinha em casa | 9, Outro"							y					
+especif_b_cross	cross		text	Especifique													
+alconfec_cross	cross		radio	23. Onde é que a família geralmente confecciona os alimentos?	"1, Dentro de casa | 2, No outro edifício | 3, Ar livro | 4, Outro"							y					
+especif_c_cross	cross		text	Especifique													
+ground_cross	cross		radio	"24. Por favor, indique o material que compõe o chão da casa principal.
+"	"1, Terra batida | 2, Não terra batida | 3, Madeira rudimentar | 4, Adobe | 5, Parquet ou madeira serrada | 6, Azulejo | 7, Cimento | 8, Outro"							y					
+especif_d_cross	cross		text	Especifique													
+roof_cross	cross		radio	"25. Por favor, indique o material que compõe o telhado da casa principal."	"1, Sem telhado/descoberto | 2, Capim/colmo/palmeira | 3, Chapas de zinco | 4, Folhas de fibrocimento | 5, Azulejo | 6, Lajes de concreto | 7, Outro"							y					
+especif_e_cross	cross		text	Especifique													
+wall_cross	cross		radio	"26. Por favor, indique o material que compõe as paredes da casa principal."	"1, Sem paredes | 2, Caniço / paus / bambu / palmeira | 3, Latão / papelão / papel / sacos | 4, Paus maticados de areia | 5, Casca de árvore | 6, Madeira / zinco | 7, Tijolos de argila | 8, Azulejo | 9, Blocos de cimento | 10, Outro"							y					
+especif_f_cross	cross		text	Especifique													
+rooms_cross	cross		text	Quantos quartos são usados para dormir?			integer	0	10			y					
+possess_cross	cross		checkbox	"28. Algum membro da família possui o seguinte:
+"	"1, Relógio | 2, Bicicleta | 3, Motorizada ou motocicleta | 4, Carro de tracção animal | 5, Veiculo ligeiro ou caminhão | 6, Barco a motor | 7, Nenhum"							y					
+land_cultiv_cross	cross		radio	29. A família possui alguma terra para cultivo?	"1, Sim | 2, Não | 3, Não sabe"							y					
+land_cultiv_dim_cross	cross		text	30. Quantos hectares de terra arável a família possui?		"Se nao/nenhum escreva ""00"",Se sao 95 ou mais escreva ""95"", Se nao sabe, escreva ""99"""	integer	0	99			y					
+animals_cross	cross		radio	"31. Esta família possui gado, rebanhos, outros animais de campo ou aves de capoeira?"	"1, Sim | 2, Não | 3, Não sabe"							y					
+cattle_cross	cross		text	Gado		"Digite ""99"" se não sabe"	number	0	99		[animals_cross] = '1'						
+horse_cross	cross		text	"Cavalos, burros ou mulas"		"Digite ""99"" se não sabe"	number	0	99		[animals_cross] = '1'						
+coats_cross	cross		text	Cabras		"Digite ""99"" se não sabe"	number	0	99		[animals_cross] = '1'						
+sheep_cross	cross		text	Ovelhas		"Digite ""99"" se não sabe"	number	0	99		[animals_cross] = '1'						
+pigs_cross	cross		text	Porcos		"Digite ""99"" se não sabe"					[animals_cross] = '1'						
+chick_cross	cross		text	Galinhas		"Digite ""99"" se não sabe"	number	0	99		[animals_cross] = '1'						
+bank_acc_cross	cross		radio	33. Algum membro da família tem conta bancaria?	"1, Sim | 2, Não | 3, Não sabe"							y					
+spray_cross	cross		radio	34. Esta casa foi pulverizada nos últimos 12 meses?	"1, Sim | 2, Não | 3, Não sabe"							y					
+w_spray_cross	cross		radio	"35. Se não, Porquê?
+"	"1, A equipe não veio | 2, Ninguem estava em casa | 3, Recusou | 4, Não sabe/outros"												
+spray_date_cross	cross		text	"36. Data da última pulverização
+"			date_dmy										
+has_nets_cross	cross		radio	"37. A casa tem redes mosquiteira que usam quando dormem?
+"	"1, Sim | 2, Não | 3, Não sabe"							y					
+nets_cross	cross		text	38. Quantas redes?		"Digite ""99"" se não sabe"	number	1	10								
+outs_sleep_cross	cross		radio	"50. Em geral, com que frequencia o participante dorme ao ar livre durante a estacao chuvosa?"	"1, Menos de uma vez por semana | 2, Uma vez por semana | 3, 2 ou 3 vezes por semana | 4, 4 ou mais vezes por semana | 5, Nao sabe"							y					
+out_sleep_cross	cross		radio	"51. Em geral, com que frequência a criança dorme ao ar livre durante a estação seca?
+"	"1, Menos de uma vez por semana | 2, Uma vez por semana | 3, 2 ou 3 vezes por semana | 4, 4 ou mais vezes por semana | 5, Nao sabe"							y					
+osleepreason_cross	cross		radio	"52. Se dorme  no ar livre, qual é o motivo?
+"	"1, Calor | 2, Outra razao"							y					
+undernet_sleep_cross	cross		radio	"53. Com que frequência a criança dorme debaixo da rede durante a estação chuvosa?
+"	"1, Menos de uma vez por semana | 2, Uma vez por semana | 3, 2 ou 3 vezes por semana | 4, 4 ou mais vezes por semana | 5, Nao sabe"							y					
+undernet_sleeps_cross	cross		radio	"54. Com que frequência a criança dorme debaixo da rede durante a estação seca?
+"	"1, Menos de uma vez por semana | 2, Uma vez por semana | 3, 2 ou 3 vezes por semana | 4, 4 ou mais vezes por semana | 5, Nao sabe"							y					
+medidas_cross	cross		radio	"55. Usou algumas das seguintes medidas durante a última semana?
+"	"1, Espirais | 2, Repelente | 3, Insecticidas(Baygon) | 4, Nenhum"							y					
+custotech_cross	cross		text	"56. Se sim, quanto pagou?
+"		"""000 ""se foi gratis"						y					
+pregnancypart_tip_cross	cross		radio	"57. Se o participante for mulher, ou esteve gravida no ultimo ano, recebeu TIP? "	"1, Sim | 2, Nao | 3, Nao sabe"												
+tip_time_cross	cross		text	"58. Se sim, quantas vezes?
+"								y					
+fuhad_malaria_cross	cross		radio	59. Algum membro da familia teve mal�ria nos �ltimos 30 dias?	"1, Sim | 2, Nao | 3, Nao sabe"												
+dsickness_cross	cross		radio	59. a) Quem ajudou a diagnosticar a doen�a da crian�a?	"1, Curandeiro | 2, Um parente experiente | 3, Pessoal de sa�de | 4, Outro"							y					
+diagnostic_cross	cross		radio	60. Como e que foi diagnosticado?	"1, Exame medico | 2, Febre | 3, Outros sintomas"							y					
+trad_cross	cross		radio	61. Procuraram atendimento num curandeiro? 	"1, Sim | 2, Nao | 3, Nao sei"							y					
+trad_con_cost_cross	cross		text	62. Quanto e que custou a consulta?			number	0	100			y					
+trad_visitno_cross	cross		text	63. Quantas vezes a sua fam�lia visitou o curandeiro? 			number	0	30			y					
+trad_material_cost_cross	cross		text	64. Quanto custaram os materiais?			number	0									
+trad_travel_cost_cross	cross		text	65. Quanto custaram as despesas da viagem?		apenas ida.	number	0				y					
+comty_cross	cross		radio	66. Procuraram atendimento no APE?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+comty_cons_cost_cross	cross		text	67. Quanto custou a consulta?			number	0				y					
+comty_test_cost_cross	cross		text	68. Quanto custou o teste?			number	0				y					
+comty_treat_cost_cross	cross		text	69. Quanto custou o tratamento?			number	0									
+fuhf_attend_cross	cross		radio	70. Procuraram atendimento numa unidade sanit�ria?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+fu_health_unit_cross	cross		dropdown	"71. Se sim, qual foi a unidade sanit�ria?"	"1, Centro de saude de Mopeia Sede | 2, Centro de saude de 8 de Marco | 3, Centro de sa�de Gulamo | 4, Centro de sa�de Sangalaza | 5, Centro de sa�de Chimuara | 6, Centro de sa�de Noere | 7, Centro de sa�de Nhacatundo | 8, Centro de sa�de Nzanza | 9, Centro de sa�de Lualua | 10, Centro de sa�de Posto Campo | 11, Centro de sa�de Catale | 12, Centro de sa�de Mungane | 13, Outro centro de sa�de"							y					
+hf_bills_cross	cross		text	72. Quanto custaram as despesas da viagem?		apenas a viagem de ida	number	0				y					
+hf_time_dur_cross	cross		text	73 Quanto tempo demorou para chegar a unidade sanit�ria?		Minutos	number	0				y					
+hf_atend_cost_cross	cross		text	74. Quanto custou a consulta?			number	0									
+fuhf_test_cost_cross	cross		text	75. Quanto custou o teste?			number	0				y					
+fuhf_treat_cost_cross	cross		text	76. Quanto custou o tratamento?			number	0				y					
+intern_cross	cross		text	77.  O participante chegou de ser hospitalizado?			number	0				y					
+days_no_cross	cross		text	"78 Se sim, quantos dias?"			number	0				y					
+fucost_cross	cross		text	79. Quanto e que gastaram com chamadas durante a hospitaliza��o?			integer	0				y					
+feeding_cost_cross	cross		text	80. Quanto gastaram em alimenta��o  durante a hospitaliza��o?			number	0				y					
+expense_cross	cross		radio	81. Alguma outra despesa?	"1, Sim | 2, Nao"							y					
+spec_expense_cross	cross		text	81. Especifique			number					y					
+expense_cost_cross	cross		text	82. Qual foi o custo da tal despesa													
+cost_after_intern_cross	cross		text	83. Quanto � que foi pago pelos medicamentos depois do participante ter voltado para casa?								y					
+fuagriculture_cross	cross		radio	"41. Agricultura, pesca mineracao?"	"1, Sim | 2, Nao"							y					
+fuagriculture_time_cross	cross		text	"41. Agricultura, pesca, mineracao"		"Escreva o n�mero de horas diarias perdidas para Agricultura, pesca ou minera��o durante o episodio da malaria!"	number	0				y					
+fuindustry_cross	cross		radio	"42. Ind�stria, alimentar ou outras ind�strias"	"1, Sim | 2, Nao"							y					
+fuindustry_time_cross	cross		text	42. Ind�stria alimentar ou outras ind�strias		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!						y					
+fucommercy_cross	cross		radio	43. Comercio/Mercado?	"1, Sim | 2, Nao"							y					
+fucommercy_time_cross	cross		text	43. Comercio/Mercado		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!	number	0				y					
+fuservices_cross	cross		radio	"44. Servi�os (restaurantes, hot�is, etc) ?"	"1, Sim | 2, Nao"							y					
+fuservices_time_cross	cross		text	"44. Servi�os (restaurantes, hot�is, etc)"		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!	number	0				y					
+fuadmin_cross	cross		radio	45. Administracao publica e defesa?	"1, Sim | 2, Nao"							y					
+fuadmin_time_cross	cross		text	45. Administracao publica e defesa:		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!						y					
+fueducation_work_cross	cross		radio	46. Trabalho na educacao	"1, Sim | 2, Nao"							y					
+fueducation_time_cross	cross		text	46. Trabalho na educa��o:		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!						y					
+fuhosp_work_cross	cross		radio	47. Trabalho em servi�os sanit�rios e sociais? 	"1, Sim | 2, Nao"							y					
+fuhosp_work_time_cross	cross		text	47. Trabalho em servi�os sanit�rios e sociais:		Escreva o n�mero de horas diarias perdidas para Industria alimentar ou outras industrias durante o episodio da malaria!						y					
+dohome_work_cross	cross		radio	48. Trabalho domestico/cuidado de criancas?	"1, Sim | 2, Nao"							y					
+fuhome_work_time_cross	cross		text	48. Trabalho domestico/cuidado de criancas:								y					
+fustudy_cross	cross		radio	49. Estudos?	"1, Sim | 2, Nao"							y					
+fustudy_time_cross	cross		text	93. Estudos:								y					
+furdperson_payment_cross	cross		radio	"94. Teve que pagar algu�m, para fazer tais actividades, enquanto voc� cuidava do seu filho? "	"1, Sim | 2, Nao"							y					
+fupayment_value_cross	cross		text	95. Quanto e que pagou?								y					
+ax_temp_cross	cross		text	96. Temperatura axilar:		99.9 se nao foi valido						y					
+fever_detec_cross	cross		radio	97. A crianca teve febre nas ultimas 48 horas?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+ranti_malarians_cross	cross		radio	98. A crianca recebeu antimal�ricos nos �ltimos 30 dias?	"1, Sim | 2, Nao | 3, Nao sei"							y					
+anti_malaric_cross	cross		checkbox	"99. Se sim, qual?"	"1, CoArtem | 2, Artesunato | 3, Quinino | 4, Fansidar | 5, Amodiaquina | 6, Nao sei | 7, Outro"	"Se for crianca, verifique no cart�o amarelo"						y					
+drug_specify_cross	cross		text	99. Especifique								y					
+vacins_cross	cross		radio	"100. Se o participante for uma crianca menor de 15 anos,  recebeu todas as vacinas do PAV para sua idade?"	"1, Sim | 2, Nao | 3, Nao sei"							y					
+futest_result_cross	cross		radio	101. Resultados dos testes rapidos de malaria	"1, Positivo | 2, Negativo | 3, Invalido | 4, Nao Feito"							y					
+posetive_test_cross	cross		radio	"102. Se o teste rapido de malaria foi positivo, cumpriu com o tratamento de forma adequada?"	"1, Sim | 2, Nao"							y					
+why_not_cross	cross		radio	"103. Se nao, porque?"	"1, Recusou? | 2, O participante recebeu um tratamento completo de antimal�ricos nos �ltimos 15 dias e desde entao nao tem tido febre | 3, Outro"							y					
+spec_why_not_cross	cross		text	Especifique								y					
+bn_parent_uri_cross	cross_nets		text	Parent URI													
+brand_cross	cross_nets		radio	39. Observe o tipo de marca da rede mosquiteira:	"1, Olyset | 2, Permanet | 3, Netprotect | 4, Duranet | 5, Interceptor | 6, DawaPlus | 7, Nao sabe | 8, Outro"							y					
+specify_cross	cross_nets		text	Especifique													
+hole_cross	cross_nets		radio	"40. Observe a rede por todos os lados. Tem furos maiores do que a ponta do seu polegar?
+"	"1, Sim | 2, Não"												
+location_cross	cross_nets		radio	41. Onde está a rede?	"1, Pendurada, arrumado | 2, Nao pendurado, nao arrumado | 3, Nao pendurado, mas acessivel | 4, Nao pendurado, e nao acessivel | 5, Outro"												
+acquisition_cross	cross_nets		radio	42. Como é que obteve a rede	"1, Comprou | 2, Campanha de distribuicao na provincia/distrito | 3, Campanha de vacinacao | 4, Na clinica | 5, Nao sabe"												
+cost_cross	cross_nets		text	"Se comprou, quanto custou?"													
+host_cross	cross_nets		radio	44. Quantos dormiram nessa rede na noite passada?	"1, 1 | 2, 2 | 3, 3 | 4, Mais de 3 | 5, Nao sabe | 6, Nenhum"												
+sleepers_cross	cross_nets		radio	45. Quem dormiu nessa rede na noite passada?	"1, Crianças | 2, Adultos | 3, Adultos e Crianças | 4, Nao sabe"												
+treatment_cross	cross_nets		radio	"46. Quando adquiriu a rede ela tinha sido tratada com insecticida?
+"	"1, Sim | 2, Não | 3, Não sabe"												
+treatment_again_cross	cross_nets		radio	47. Voltou a tratar a rede novamente?	"1, Sim | 2, Não | 3, Não sabe"												
+treatment_last_cross	cross_nets		radio	"48. Se sim, quando foi a ultima vez?"	"1, Menos de 6 meses | 2, 6 a 12 meses | 3, Mais de 1 ano | 4, Nao sabe"												
+wash_cross	cross_nets		radio	49. Já lavou a rede desde que a obteve?	"1, Sim | 2, Não"												
