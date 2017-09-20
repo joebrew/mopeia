@@ -1,0 +1,447 @@
+---
+title: "Mopeia surveillance dashboard"
+author: joe@databrew.cc
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+---
+  
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, comment = NA, error= FALSE, cache = F}
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE)
+```
+
+```{r, results = 'hide'}
+# Packages
+library(ggplot2)
+library(cism)
+library(rgeos)
+library(maptools)
+library(rgdal)
+library(tidyr)
+library(RColorBrewer)
+library(dplyr)
+library(leaflet)
+library(readr)
+library(ggthemes)
+library(ggrepel)
+library(knitr)
+library(kableExtra)
+options(knitr.table.format = "html") 
+# Define a theme
+theme_mopeia <- ggthemes::theme_hc
+library(flexdashboard)
+
+```
+
+```{r}
+# Get data
+source('get_data.R')
+```
+
+Overview
+=====================================  
+
+
+Row
+-----------------------------------------------------------------------
+
+### Visits carried out
+
+```{r}
+valueBox(length(which(visit_dates$visit_done)), icon = "fa-stethoscope")
+```
+
+### Malaria cases
+
+```{r}
+valueBox(length(which(visit_dates$malaria)), icon = "fa-flag",
+         color = 'info')
+```
+
+### Children-years observed
+
+```{r}
+years <- round(nrow(etar) / 365.25)
+valueBox(round(nrow(etar) / 365.25), 
+         icon = "fa-binoculars",
+         color = 'warning')
+```
+
+
+    
+Row
+-------------------------------------
+    
+### Study area
+
+```{r}
+leaflet() %>%
+  # addTiles() %>%
+  addProviderTiles('Esri.WorldImagery') %>%
+  addPolygons(data = cism::mop2, color = 'darkorange')
+```
+
+### Village centroids
+
+```{r}
+village <- master_table %>%
+  group_by(village_number) %>%
+  summarise(lat = mean(lat),
+            lng = mean(lng),
+            status = ifelse(dplyr::first(status), 'Spray', 'No spray')) %>%
+  mutate(color = ifelse(status == 'Spray', 'darkorange', 'blue'))
+
+leaflet() %>%
+  addTiles() %>%
+  # addProviderTiles('Stamen.TonerHybrid') %>%
+  # addPolygons(data = cism::mop2) %>%
+  addCircles(data = village,
+                   lng = ~lng,
+                   lat = ~lat,
+                   color = ~color,
+             popup = paste0('Village ', village$village_number, ': ', village$status))
+```
+
+ACD
+=====================================  
+
+    
+    
+Row
+-------------------------------------
+    
+### Round incidence
+
+
+```{r}
+# ACD ########################
+# Round Incidence (seven of them)
+# (# of RDT+ that round* / # of children in cohort that round)
+#   * Round: equals visits of ACD. We are currently at the end of the 8th monthly follow up
+x <- visit_dates %>%
+  group_by(round) %>%
+  summarise(children = n(),
+            positives = length(which(malaria)),
+            negatives = length(which(!malaria)),
+            tested = length(!is.na(malaria))) %>%
+  ungroup %>%
+  mutate(percent_positive = positives / tested * 100) %>%
+  mutate(Tests = tested)
+
+ggplot(data = x,
+       aes(x = round,
+           y = percent_positive)) +
+  geom_line(alpha = 0.7) +
+  geom_point(alpha = 0.6,
+             aes(size = Tests)) +
+  labs(x = 'Round',
+       y = 'Percent positive') +
+  theme_mopeia() +
+  scale_x_continuous(breaks = 1:max(x$round))
+
+```
+ 
+   
+### Round incidence by spray status
+
+
+```{r}
+# ACD ########################
+# Round Incidence (seven of them)
+# (# of RDT+ that round* / # of children in cohort that round)
+#   * Round: equals visits of ACD. We are currently at the end of the 8th monthly follow up
+x <- visit_dates %>%
+  group_by(round, spray_status) %>%
+  summarise(children = n(),
+            positives = length(which(malaria)),
+            negatives = length(which(!malaria)),
+            tested = length(!is.na(malaria))) %>%
+  ungroup %>%
+  mutate(percent_positive = positives / tested * 100) %>%
+  mutate(Tests = tested)
+
+ggplot(data = x,
+       aes(x = round,
+           y = percent_positive,
+           color = spray_status)) +
+  geom_line(alpha = 0.7) +
+  geom_point(alpha = 0.6,
+             aes(size = Tests)) +
+  labs(x = 'Round',
+       y = 'Percent positive') +
+  theme_mopeia() +
+  scale_x_continuous(breaks = 1:max(x$round)) +
+  scale_color_manual(name= '',
+                     values = c('darkorange', 'blue'))
+  
+
+```
+  
+ 
+Row
+-------------------------------------
+    
+
+### Cumulative incidence
+    
+```{r}
+#   Cumulative incidence
+#   (Total # of RDT+ in the cohort since start / # of child-years at risk**)
+#     ** number of children in the cohort x time they have been followed. If a child was LFU then he
+#     contributed until that moment to child-time-at-risk
+options(scipen = '999')
+# Define a new case
+etar$new_case <- etar$malaria & etar$visit
+x <- etar %>%
+  group_by(date) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case))) %>%
+  ungroup %>%
+  mutate(cumulative_new_cases = cumsum(new_cases),
+         cumulative_children_at_risk = cumsum(children_at_risk))  %>%
+  mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25))
+
+# # total number of children years at risk
+# denom <- dplyr::last(x$cumulative_children_at_risk) / 365.25
+# 
+# x <- x %>%
+#   mutate(cumulative_incidence = cumulative_new_cases / denom)
+
+ggplot(data = x,
+       aes(x = date,
+           y = cumulative_incidence)) +
+  geom_line() +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Cumulative incidence per child-years at risk')
+``` 
+    
+    
+    
+### Cumulative incidence by spray status
+    
+```{r}
+#     Cumulative incidence by spray status
+#     As above but disaggregated by those in “spray” and “no-spray” areas.
+#     Please add RR and 95%CI for the RR
+
+x <- etar %>%
+  group_by(date, spray_status) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case))) %>%
+  ungroup %>%
+  group_by(spray_status) %>%
+  mutate(cumulative_new_cases = cumsum(new_cases),
+         cumulative_children_at_risk = cumsum(children_at_risk)) %>%
+  ungroup %>%
+  mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25))
+
+  # mutate(denom = dplyr::last(cumulative_children_at_risk) / 365.25) %>%
+  # ungroup %>%
+  # mutate(cumulative_incidence = cumulative_new_cases / denom)
+
+ggplot(data = x,
+       aes(x = date,
+           y = cumulative_incidence,
+           color = spray_status)) +
+  geom_line() +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Cumulative incidence per child-years at risk') +
+  scale_color_manual(name= '',
+                     values = c('darkorange', 'blue'))
+```
+    
+Row
+-------------------------------------
+    
+
+### Corrected incidence: removing 30 days from time-at-risk for every incident case
+
+```{r}
+library(RcppRoll)
+#     Corrected incidence 1
+#     Cumulative incidence BUT every time a child is positive we should remove 30 days of time-at-risk from
+#     the denominator
+
+x <- etar %>%
+  mutate(val = as.numeric(new_case)) %>%
+  # group_by(permid) %>%
+  mutate(remove = RcppRoll::roll_sum(x = val, n = 30, fill = 0, na.rm = FALSE)) %>%
+  ungroup %>%
+  filter(remove == 0 | new_case) %>%
+  group_by(date, spray_status) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case))) %>%
+  ungroup %>%
+  group_by(spray_status) %>%
+  mutate(cumulative_new_cases = cumsum(new_cases),
+         cumulative_children_at_risk = cumsum(children_at_risk)) %>%
+  mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25))
+
+ggplot(data = x,
+       aes(x = date,
+           y = cumulative_incidence,
+           color = spray_status)) +
+  geom_line() +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Cumulative incidence per child-years at risk') +
+  scale_color_manual(name= '',
+                     values = c('darkorange', 'blue'))
+
+```
+    
+    
+### Corrected incidence: removing 30 days for every incident case, and ignoring next visit
+
+```{r}
+x <- etar %>%
+  mutate(val = as.numeric(new_case)) %>%
+  # group_by(permid) %>%
+  mutate(remove = RcppRoll::roll_sum(x = val, n = 30, fill = 0, na.rm = FALSE)) %>%
+  ungroup %>%
+  filter(remove == 0 | new_case)
+# Identify next cases to be removed too
+next_cases <- etar %>%
+  filter(visit) %>%
+  group_by(permid) %>%
+  mutate(ignore = dplyr::lag(malaria, 1, default = FALSE)) %>%
+  dplyr::select(permid, date, ignore)
+  
+x <- left_join(x, next_cases)
+x <- x %>% filter(!ignore)
+x <- x %>%
+  group_by(date, spray_status) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case))) %>%
+  ungroup %>%
+  group_by(spray_status) %>%
+  mutate(cumulative_new_cases = cumsum(new_cases),
+         cumulative_children_at_risk = cumsum(children_at_risk)) %>%
+  mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25))
+
+ggplot(data = x,
+       aes(x = date,
+           y = cumulative_incidence,
+           color = spray_status)) +
+  geom_line() +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Cumulative incidence per child-years at risk') +
+  scale_color_manual(name= '',
+                     values = c('darkorange', 'blue'))
+```
+
+Row
+-------------------------------------
+    
+
+### Cumulative incidence by spray status and net usage (using variable `main_malaria_control_undernet_sleep`), no denominator removals
+
+```{r}
+#     As above but also disaggregated by sleep last night (question 9 of follow questionnaire)
+nets <- acd %>% dplyr::select(perm_id, main_malaria_control_undernet_sleep) %>%
+  rename(permid = perm_id) %>%
+  rename(net = main_malaria_control_undernet_sleep)
+# Decode
+net_dict <- data_frame(net = as.character(1:5),
+                       bednet = c('< 1 time per week',
+                                  '1 time per week',
+                                  '2-3 times per week',
+                                  '4 or more times per week',
+                                  'Respondent does not know'))
+nets <- left_join(nets, net_dict)
+
+# Join to etar
+
+x <- etar %>%
+  left_join(nets, by ='permid') %>%
+  group_by(date, spray_status, bednet) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case))) %>%
+  ungroup %>%
+  group_by(spray_status, bednet) %>%
+  mutate(cumulative_new_cases = cumsum(new_cases),
+         cumulative_children_at_risk = cumsum(children_at_risk)) %>%
+  ungroup %>%
+  mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25)) #%>%
+  # mutate(bednet = paste0('Bednet: ', bednet))
+
+  # mutate(denom = dplyr::last(cumulative_children_at_risk) / 365.25) %>%
+  # ungroup %>%
+  # mutate(cumulative_incidence = cumulative_new_cases / denom)
+
+ggplot(data = x,
+       aes(x = date,
+           y = cumulative_incidence,
+           color = bednet)) +
+  geom_line() +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Cumulative incidence per child-years at risk (log scale)') +
+  scale_color_manual(name= 'Net',
+                     values = rev(colorRampPalette(brewer.pal(n = 9, 'Spectral'))(length(unique(x$bednet))))) +
+  facet_wrap(~spray_status) +
+  theme(axis.text.x = element_text(angle = 90)) +
+  theme(strip.text.x = element_text(size = 8)) +
+  scale_y_log10()
+```
+
+
+PCD
+=====================================  
+    
+Row
+-------------------------------------
+    
+### Chart 1
+    
+```{r}
+
+#     PCD
+#     Monthly Incidence in children under 5 (nine of them)
+#     (# of <5s RDT+ that month / # of children under 5 that live in areas served by that HF (according to
+#       census) * I acknowledge this is not perfect as they might go to other HF as well
+#     Monthly Incidence in children under 5 BY spray status
+#     As above but disaggregated by those residing in “spray” and “no-spray” areas
+#     Please add RR and 95%CI for the RR
+#     RDT positivity rate by HF by month in children <5
+#     (Pooled # of RDT+ in children <5 that month/ all RDTs performed in children <5 that month)
+#       Mopeia map of RDT positivity rate by age <5 and >5
+
+barplot(1:10,
+        main = 'Under construction')
+```
+ 
+### Chart 2
+    
+```{r}
+barplot(1:10,
+        main = 'Under construction')
+``` 
+
+Row
+-------------------------------------
+    
+### Chart 3
+    
+```{r}
+barplot(1:10,
+        main = 'Under construction')
+```
+    
+### Chart 4
+
+```{r}
+barplot(1:10,
+        main = 'Under construction')
+```
