@@ -53,26 +53,48 @@ Overview
 Row
 -----------------------------------------------------------------------
 
-### Visits carried out
+### ACD visits carried out
 
 ```{r}
 valueBox(length(which(visit_dates$visit_done)), icon = "fa-stethoscope")
 ```
 
-### Malaria cases
+### Malaria cases detected through ACD
 
 ```{r}
 valueBox(length(which(visit_dates$malaria)), icon = "fa-flag",
          color = 'info')
 ```
 
-### Children-years observed
+### Children-years observed in ACD
 
 ```{r}
 years <- round(nrow(etar) / 365.25)
 valueBox(round(nrow(etar) / 365.25), 
          icon = "fa-binoculars",
          color = 'warning')
+```
+
+
+Row
+-----------------------------------------------------------------------
+
+### PCD visits among 0-4 year olds
+
+```{r}
+valueBox(nrow(pcd), icon = "fa-vcard", color = 'warning')
+```
+
+### PCD malaria cases among 0-4 year olds
+
+```{r}
+valueBox(length(which(pcd$malaria)), icon = "fa-vcard", color = 'danger')
+```
+
+### RDTs administered in PCD to 0-4 year olds
+
+```{r}
+valueBox(length(which(!is.na(pcd$rdt))), icon = "fa-vcard", color = 'info')
 ```
 
 
@@ -94,14 +116,15 @@ leaflet() %>%
 ```{r}
 village <- master_table %>%
   group_by(village_number) %>%
-  summarise(lat = mean(lat),
+  summarise(children = n(),
+            lat = mean(lat),
             lng = mean(lng),
             status = ifelse(dplyr::first(status), 'Spray', 'No spray')) %>%
   mutate(color = ifelse(status == 'Spray', 'darkorange', 'blue'))
 
 leaflet() %>%
-  addTiles() %>%
-  # addProviderTiles('Stamen.TonerHybrid') %>%
+  # addTiles() %>%
+  addProviderTiles('Stamen.TonerHybrid') %>%
   # addPolygons(data = cism::mop2) %>%
   addCircles(data = village,
                    lng = ~lng,
@@ -118,8 +141,7 @@ ACD
 Row
 -------------------------------------
     
-### Round incidence
-
+### Round-specific incidence figure
 
 ```{r}
 # ACD ########################
@@ -146,12 +168,20 @@ ggplot(data = x,
        y = 'Percent positive') +
   theme_mopeia() +
   scale_x_continuous(breaks = 1:max(x$round))
-
 ```
- 
-   
-### Round incidence by spray status
 
+### Round-specific incidence table
+
+```{r}
+x <- x %>%
+  dplyr::select(round, Tests, positives, negatives, percent_positive)
+prettify(x)
+```
+
+Row
+-------------------------------------
+   
+### Round incidence by spray status figure
 
 ```{r}
 # ACD ########################
@@ -181,16 +211,22 @@ ggplot(data = x,
   scale_x_continuous(breaks = 1:max(x$round)) +
   scale_color_manual(name= '',
                      values = c('darkorange', 'blue'))
-  
-
 ```
-  
+
+### Round incidence by spray status table
+
+
+```{r}
+x <- x %>%
+  dplyr::select(round, spray_status, Tests, positives, negatives, percent_positive)
+prettify(x)
+```  
  
 Row
 -------------------------------------
-    
 
-### Cumulative incidence
+
+### Cumulative incidence figure
     
 ```{r}
 #   Cumulative incidence
@@ -215,18 +251,29 @@ x <- etar %>%
 # x <- x %>%
 #   mutate(cumulative_incidence = cumulative_new_cases / denom)
 
-ggplot(data = x,
+ggplot(data = x %>% filter(date >= '2017-01-31'),
        aes(x = date,
            y = cumulative_incidence)) +
   geom_line() +
   theme_mopeia() +
   labs(x = '',
-       y = 'Cumulative incidence per child-years at risk')
+       y = 'Cumulative incidence per child-years at risk') 
 ``` 
     
+
+### Cumulative incidence table
+
+```{r}
+prettify(x)
+```
+
+        
+Row
+-------------------------------------
     
+
     
-### Cumulative incidence by spray status
+### Cumulative incidence by spray status figure
     
 ```{r}
 #     Cumulative incidence by spray status
@@ -248,7 +295,7 @@ x <- etar %>%
   # ungroup %>%
   # mutate(cumulative_incidence = cumulative_new_cases / denom)
 
-ggplot(data = x,
+ggplot(data = x %>% filter(date >= '2017-01-31'),
        aes(x = date,
            y = cumulative_incidence,
            color = spray_status)) +
@@ -259,12 +306,19 @@ ggplot(data = x,
   scale_color_manual(name= '',
                      values = c('darkorange', 'blue'))
 ```
+
+### Cumulative incidence by spray status table
+
+```{r}
+prettify(x)
+```
+
     
 Row
 -------------------------------------
     
 
-### Corrected incidence: removing 30 days from time-at-risk for every incident case
+### Corrected incidence: removing 30 days from time-at-risk for every incident case figure
 
 ```{r}
 library(RcppRoll)
@@ -287,7 +341,7 @@ x <- etar %>%
          cumulative_children_at_risk = cumsum(children_at_risk)) %>%
   mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25))
 
-ggplot(data = x,
+ggplot(data = x %>% filter(date >= '2017-01-31'),
        aes(x = date,
            y = cumulative_incidence,
            color = spray_status)) +
@@ -300,8 +354,17 @@ ggplot(data = x,
 
 ```
     
+### Corrected incidence: removing 30 days from time-at-risk for every incident case table
     
-### Corrected incidence: removing 30 days for every incident case, and ignoring next visit
+    
+```{r}
+prettify(x)
+```
+    
+Row
+-------------------------------------
+
+### Corrected incidence: removing 30 days for every incident case, and ignoring next visit figure
 
 ```{r}
 x <- etar %>%
@@ -329,7 +392,7 @@ x <- x %>%
          cumulative_children_at_risk = cumsum(children_at_risk)) %>%
   mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25))
 
-ggplot(data = x,
+ggplot(data = x %>% filter(date >= '2017-01-31'),
        aes(x = date,
            y = cumulative_incidence,
            color = spray_status)) +
@@ -341,11 +404,17 @@ ggplot(data = x,
                      values = c('darkorange', 'blue'))
 ```
 
+### Corrected incidence: removing 30 days for every incident case, and ignoring next visit table
+
+```{r}
+prettify(x)
+```
+
 Row
 -------------------------------------
     
 
-### Cumulative incidence by spray status and net usage (using variable `main_malaria_control_undernet_sleep`), no denominator removals
+### Cumulative incidence by spray status and net usage (using variable `main_malaria_control_undernet_sleep`), no denominator removals figure
 
 ```{r}
 #     As above but also disaggregated by sleep last night (question 9 of follow questionnaire)
@@ -380,20 +449,26 @@ x <- etar %>%
   # ungroup %>%
   # mutate(cumulative_incidence = cumulative_new_cases / denom)
 
-ggplot(data = x,
+ggplot(data = x %>% filter(date >= '2017-01-31'),
        aes(x = date,
            y = cumulative_incidence,
            color = bednet)) +
   geom_line() +
   theme_mopeia() +
   labs(x = '',
-       y = 'Cumulative incidence per child-years at risk (log scale)') +
+       y = 'Cumulative incidence per child-years at risk (log)') +
   scale_color_manual(name= 'Net',
                      values = rev(colorRampPalette(brewer.pal(n = 9, 'Spectral'))(length(unique(x$bednet))))) +
   facet_wrap(~spray_status) +
   theme(axis.text.x = element_text(angle = 90)) +
   theme(strip.text.x = element_text(size = 8)) +
   scale_y_log10()
+```
+
+### Cumulative incidence by spray status and net usage (using variable `main_malaria_control_undernet_sleep`), no denominator removals table
+
+```{r}
+prettify(x)
 ```
 
 
@@ -403,45 +478,645 @@ PCD
 Row
 -------------------------------------
     
-### Chart 1
+### Monthly PCD malaria cases figure (0-4 years only)
     
 ```{r}
+x <- pcd %>%
+  dplyr::mutate(month = date_truncate(date, level = 'month')) %>%
+  dplyr::group_by(month) %>%
+  dplyr::summarise(cases = length(which(malaria)),
+            valid_tests = length(which(!is.na(rdt))),
+            visits = n()) %>%
+  ungroup %>%
+  dplyr::filter(month >= '2016-12-01')
 
-#     PCD
-#     Monthly Incidence in children under 5 (nine of them)
-#     (# of <5s RDT+ that month / # of children under 5 that live in areas served by that HF (according to
-#       census) * I acknowledge this is not perfect as they might go to other HF as well
-#     Monthly Incidence in children under 5 BY spray status
-#     As above but disaggregated by those residing in “spray” and “no-spray” areas
-#     Please add RR and 95%CI for the RR
-#     RDT positivity rate by HF by month in children <5
-#     (Pooled # of RDT+ in children <5 that month/ all RDTs performed in children <5 that month)
-#       Mopeia map of RDT positivity rate by age <5 and >5
-
-barplot(1:10,
-        main = 'Under construction')
+ggplot(data = x,
+       aes(x = month,
+           y = cases)) +
+  geom_bar(fill = 'darkorange',
+           alpha = 0.6,
+           stat = 'identity') +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Positive RDTs')
 ```
- 
-### Chart 2
-    
+
+### Monthly PCD malaria cases table (0-4 years only)
+
 ```{r}
-barplot(1:10,
-        main = 'Under construction')
-``` 
+prettify(x %>%
+           mutate(month = format(month, '%B %Y')))
+```
+
+Row
+-------------------------------------
+   
+
+### Monthly PCD malaria cases by health facility figure (0-4 years only)
+
+```{r}
+x <- pcd %>%
+  dplyr::mutate(month = date_truncate(date, level = 'month')) %>%
+  dplyr::group_by(month, health_facility) %>%
+  dplyr::summarise(cases = length(which(malaria)),
+            valid_tests = length(which(!is.na(rdt))),
+            visits = n()) %>%
+  ungroup %>%
+  dplyr::filter(month >= '2016-12-01')
+
+ggplot(data = x,
+       aes(x = month,
+           y = cases)) +
+  geom_bar(fill = 'darkorange',
+           alpha = 0.6,
+           stat = 'identity') +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Positive RDTs') +
+  facet_wrap(~health_facility)
+```
+
+### Monthly PCD malaria cases by health facility table (0-4 years only)
+
+
+```{r}
+prettify(x %>%
+           mutate(month = format(month, '%B %Y')))
+```
+
+Row
+-------------------------------------
+
+
+### Monthly PCD malaria cases by spray status figure (0-4 years only)
+
+```{r}
+x <- pcd %>%
+  dplyr::mutate(month = date_truncate(date, level = 'month')) %>%
+  dplyr::group_by(month, spray_status) %>%
+  dplyr::summarise(cases = length(which(malaria)),
+            valid_tests = length(which(!is.na(rdt))),
+            visits = n()) %>%
+  ungroup %>%
+  dplyr::filter(month >= '2016-12-01') %>%
+  mutate(spray_status = ifelse(is.na(spray_status),
+                               'Unknown',
+                               spray_status))
+
+ggplot(data = x,
+       aes(x = month,
+           y = cases,
+           color = spray_status)) +
+  geom_line(alpha = 0.6,
+           stat = 'identity') +
+  geom_point() +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Positive RDTs') +
+  scale_x_date(breaks = sort(unique(x$month))) +
+  scale_color_manual(name= '',
+                     values = c('darkorange', 'blue', 'black')) +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Monthly PCD malaria cases by spray status table (0-4 years only)
+
+
+```{r}
+prettify(x %>%
+           mutate(month = format(month, '%B %Y')))
+```
+   
+Row
+-------------------------------------
+
+
+
+### Cumulative monthly PCD malaria cases by spray status figure (0-4 years only)
+
+```{r}
+x <- pcd %>%
+  dplyr::mutate(month = date_truncate(date, level = 'month')) %>%
+  dplyr::group_by(month, spray_status) %>%
+  dplyr::summarise(cases = length(which(malaria)),
+            valid_tests = length(which(!is.na(rdt))),
+            visits = n()) %>%
+  ungroup %>%
+  dplyr::filter(month >= '2016-12-01') %>%
+  mutate(spray_status = ifelse(is.na(spray_status),
+                               'Unknown',
+                               spray_status)) %>%
+  arrange(month) %>%
+  group_by(spray_status) %>%
+  mutate(cumulative_cases = cumsum(cases)) %>%
+  ungroup
+
+ggplot(data = x,
+       aes(x = month,
+           y = cumulative_cases,
+           color = spray_status)) +
+  geom_line(alpha = 0.6,
+           stat = 'identity') +
+  geom_point() +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Positive RDTs') +
+  scale_x_date(breaks = sort(unique(x$month))) +
+  scale_color_manual(name= '',
+                     values = c('darkorange', 'blue', 'black')) +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+### Cumulative monthly PCD malaria cases by spray status table (0-4 years only)
+
+
+```{r}
+prettify(x %>%
+           mutate(month = format(month, '%B %Y')) %>%
+           dplyr::select(month, spray_status, cumulative_cases))
+```
+
+
+
+Analysis
+=====================================  
 
 Row
 -------------------------------------
     
-### Chart 3
-    
-```{r}
-barplot(1:10,
-        main = 'Under construction')
-```
-    
-### Chart 4
+### Month-specific relative risk from ACD (spray relative to no spray) figure
 
 ```{r}
-barplot(1:10,
-        main = 'Under construction')
+library("epitools")
+
+x <- etar %>%    
+  mutate(month = date_truncate(date, 'month')) %>%
+  group_by(month, spray_status) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case & visit))) %>%
+  ungroup %>%
+  dplyr::select(month, spray_status, new_cases, children_at_risk) %>%
+  group_by(month) %>%
+  filter(n() == 2) %>%
+  summarise(cases_spray = new_cases[spray_status == 'Spray'],
+            cases_no_spray = new_cases[spray_status == 'No spray'],
+            at_risk_spray = children_at_risk[spray_status == 'Spray'],
+            at_risk_no_spray = children_at_risk[spray_status == 'No spray'])
+# Calculate relative risk and confidence intervals
+x$rr <- x$lower <- x$upper <- x$p <- NA
+for (i in 1:nrow(x)){
+  tab <- matrix(as.numeric(x[i,2:5]), nrow = 2)
+  out <- epitab(tab,method="riskratio")$tab
+  x$rr[i] <- out[,colnames(out) == 'riskratio'][2]
+  x$lower[i] <- out[,colnames(out) == 'lower'][2]
+  x$upper[i] <- out[,colnames(out) == 'upper'][2]
+  x$p[i] <- out[,colnames(out) == 'p.value'][2]
+}
+
+ggplot(data = x,
+       aes(x = month,
+           y = rr)) +
+  geom_point() +
+  geom_linerange(aes(ymax = upper,
+                     ymin = lower)) +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Relative risk') +
+  scale_x_date(breaks = sort(unique(x$month)),
+               date_labels = '%b') +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = 1,
+             color = 'red')
+
+```
+
+### Month-specific relative risk from ACD (spray relative to no spray) table
+
+```{r}
+prettify(x)
+```
+   
+    
+Row
+-------------------------------------
+    
+### Cumulative relative risk from ACD (spray relative to no spray) figure
+
+
+```{r}
+library("epitools")
+
+x <- etar %>%
+  group_by(date, spray_status) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case & visit))) %>%
+  ungroup %>%
+  group_by(spray_status) %>%
+  mutate(cumulative_new_cases = cumsum(new_cases),
+         cumulative_children_at_risk = cumsum(children_at_risk))  %>%
+  mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25)) %>%
+  ungroup %>%
+  mutate(month = date_truncate(date, 'month')) %>%
+  group_by(month) %>%
+  filter(date == max(date)) %>%
+  ungroup %>%
+  dplyr::select(date, spray_status, cumulative_new_cases, 
+                cumulative_children_at_risk) %>%
+  group_by(date) %>%
+  filter(n() == 2) %>%
+  summarise(cases_spray = cumulative_new_cases[spray_status == 'Spray'],
+            cases_no_spray = cumulative_new_cases[spray_status == 'No spray'],
+            at_risk_spray = cumulative_children_at_risk[spray_status == 'Spray'],
+            at_risk_no_spray = cumulative_children_at_risk[spray_status == 'No spray'])
+# Calculate relative risk and confidence intervals
+x$rr <- x$lower <- x$upper <- x$p <- NA
+for (i in 1:nrow(x)){
+  tab <- matrix(as.numeric(x[i,2:5]), nrow = 2)
+  out <- epitab(tab,method="riskratio")$tab
+  x$rr[i] <- out[,colnames(out) == 'riskratio'][2]
+  x$lower[i] <- out[,colnames(out) == 'lower'][2]
+  x$upper[i] <- out[,colnames(out) == 'upper'][2]
+  x$p[i] <- out[,colnames(out) == 'p.value'][2]
+}
+
+ggplot(data = x,
+       aes(x = date,
+           y = rr)) +
+  geom_point() +
+  geom_linerange(aes(ymax = upper,
+                     ymin = lower)) +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'Relative risk') +
+  scale_x_date(breaks = sort(unique(x$date)),
+               date_labels = '%b') +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = 1,
+             color = 'red')
+```
+
+    
+### Cumulative relative risk from ACD (spray relative to no spray) table
+
+```{r}
+prettify(x)
+```
+
+
+
+Row
+-------------------------------------
+    
+### Month-specific odds ratios from ACD (spray relative to no spray) figure
+
+```{r}
+library("epitools")
+
+x <- etar %>%    
+  mutate(month = date_truncate(date, 'month')) %>%
+  group_by(month, spray_status) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case & visit))) %>%
+  ungroup %>%
+  dplyr::select(month, spray_status, new_cases, children_at_risk) %>%
+  group_by(month) %>%
+  filter(n() == 2) %>%
+  summarise(cases_spray = new_cases[spray_status == 'Spray'],
+            cases_no_spray = new_cases[spray_status == 'No spray'],
+            at_risk_spray = children_at_risk[spray_status == 'Spray'],
+            at_risk_no_spray = children_at_risk[spray_status == 'No spray'])
+# Calculate odds ratios and confidence intervals
+x$rr <- x$lower <- x$upper <- x$p <- NA
+for (i in 1:nrow(x)){
+  tab <- matrix(as.numeric(x[i,2:5]), nrow = 2)
+  out <- epitab(tab,method="oddsratio")$tab
+  x$rr[i] <- out[,colnames(out) == 'oddsratio'][2]
+  x$lower[i] <- out[,colnames(out) == 'lower'][2]
+  x$upper[i] <- out[,colnames(out) == 'upper'][2]
+  x$p[i] <- out[,colnames(out) == 'p.value'][2]
+}
+
+ggplot(data = x,
+       aes(x = month,
+           y = rr)) +
+  geom_point() +
+  geom_linerange(aes(ymax = upper,
+                     ymin = lower)) +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'odds ratios') +
+  scale_x_date(breaks = sort(unique(x$month)),
+               date_labels = '%b') +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = 1,
+             color = 'red')
+
+```
+
+### Month-specific odds ratios from ACD (spray relative to no spray) table
+
+```{r}
+prettify(x)
+```
+   
+    
+Row
+-------------------------------------
+    
+### Cumulative odds ratios from ACD (spray relative to no spray) figure
+
+
+```{r}
+library("epitools")
+
+x <- etar %>%
+  group_by(date, spray_status) %>%
+  summarise(children_at_risk = n(),
+            new_cases = length(which(new_case & visit))) %>%
+  ungroup %>%
+  group_by(spray_status) %>%
+  mutate(cumulative_new_cases = cumsum(new_cases),
+         cumulative_children_at_risk = cumsum(children_at_risk))  %>%
+  mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25)) %>%
+  ungroup %>%
+  mutate(month = date_truncate(date, 'month')) %>%
+  group_by(month) %>%
+  filter(date == max(date)) %>%
+  ungroup %>%
+  dplyr::select(date, spray_status, cumulative_new_cases, 
+                cumulative_children_at_risk) %>%
+  group_by(date) %>%
+  filter(n() == 2) %>%
+  summarise(cases_spray = cumulative_new_cases[spray_status == 'Spray'],
+            cases_no_spray = cumulative_new_cases[spray_status == 'No spray'],
+            at_risk_spray = cumulative_children_at_risk[spray_status == 'Spray'],
+            at_risk_no_spray = cumulative_children_at_risk[spray_status == 'No spray'])
+# Calculate odds ratios and confidence intervals
+x$rr <- x$lower <- x$upper <- x$p <- NA
+for (i in 1:nrow(x)){
+  tab <- matrix(as.numeric(x[i,2:5]), nrow = 2)
+  out <- epitab(tab,method="oddsratio")$tab
+  x$rr[i] <- out[,colnames(out) == 'oddsratio'][2]
+  x$lower[i] <- out[,colnames(out) == 'lower'][2]
+  x$upper[i] <- out[,colnames(out) == 'upper'][2]
+  x$p[i] <- out[,colnames(out) == 'p.value'][2]
+}
+
+ggplot(data = x,
+       aes(x = date,
+           y = rr)) +
+  geom_point() +
+  geom_linerange(aes(ymax = upper,
+                     ymin = lower)) +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'odds ratios') +
+  scale_x_date(breaks = sort(unique(x$date)),
+               date_labels = '%b') +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = 1,
+             color = 'red')
+```
+
+    
+### Cumulative odds ratios from ACD (spray relative to no spray) table
+
+```{r}
+prettify(x)
+```
+
+
+
+Row
+-------------------------------------
+    
+### Month-specific odds ratios from PCD (spray relative to no spray) 
+
+```{r}
+library("epitools")
+
+# Get denominators
+by_ss <- master_table %>%
+  group_by(spray_status = ifelse(status, 'Spray', 'No spray')) %>%
+  summarise(children = n())
+
+x <- pcd %>%    
+  # mutate(month = date_truncate(date, 'month')) %>%
+  # group_by(month, spray_status) %>%
+  group_by(date, spray_status) %>%
+  summarise(new_cases = length(which(malaria))) %>%
+  ungroup %>%
+  filter(!is.na(spray_status))
+left <- expand.grid(date = seq(as.Date('2016-12-01'), 
+                              max(x$date),
+                              by = 1),
+                    spray_status = sort(unique(x$spray_status)))
+x <- left_join(left,
+               x)
+x$new_cases[is.na(x$new_cases)] <- 0
+x <- x %>% filter(!is.na(spray_status))  
+
+# Join denominators
+x <- x %>%
+  left_join(by_ss)
+
+x <- x %>%
+  dplyr::arrange(date) %>%
+  dplyr::group_by(spray_status) %>%
+  dplyr::mutate(cumulative_new_cases = cumsum(new_cases),
+            cumulative_children_at_risk = cumsum(children)) %>%
+  ungroup %>%
+  mutate(month = date_truncate(date, 'month')) %>%
+  # group_by(month) %>%
+  # filter(date == max(date)) %>%
+  # ungroup %>%
+  rename(children_at_risk = children) %>%
+  group_by(month) %>%
+  # filter(n() == 2) %>%
+  summarise(cases_spray = sum(new_cases[spray_status == 'Spray']),
+            cases_no_spray = sum(new_cases[spray_status == 'No spray']),
+            at_risk_spray = sum(children_at_risk[spray_status == 'Spray']),
+            at_risk_no_spray = sum(children_at_risk[spray_status == 'No spray']))
+# Calculate odds ratios and confidence intervals
+x$rr <- x$lower <- x$upper <- x$p <- NA
+for (i in 1:nrow(x)){
+  tab <- matrix(as.numeric(x[i,2:5]), nrow = 2)
+  out <- epitab(tab,method="oddsratio")$tab
+  x$rr[i] <- out[,colnames(out) == 'oddsratio'][2]
+  x$lower[i] <- out[,colnames(out) == 'lower'][2]
+  x$upper[i] <- out[,colnames(out) == 'upper'][2]
+  x$p[i] <- out[,colnames(out) == 'p.value'][2]
+}
+
+ggplot(data = x,
+       aes(x = month,
+           y = rr)) +
+  geom_point() +
+  geom_linerange(aes(ymax = upper,
+                     ymin = lower)) +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'odds ratios') +
+  scale_x_date(breaks = sort(unique(x$month)),
+               date_labels = '%b') +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = 1,
+             color = 'red')
+```
+
+    
+### Month-specific odds ratios from PCD (spray relative to no spray) table
+
+```{r}
+prettify(x)
+```
+
+Row
+-------------------------------------
+  
+      
+### Cumulative odds ratios from PCD (spray relative to no spray) 
+
+```{r}
+library("epitools")
+
+# Get denominators
+by_ss <- master_table %>%
+  group_by(spray_status = ifelse(status, 'Spray', 'No spray')) %>%
+  summarise(children = n())
+
+x <- pcd %>%    
+  # mutate(month = date_truncate(date, 'month')) %>%
+  # group_by(month, spray_status) %>%
+  group_by(date, spray_status) %>%
+  summarise(new_cases = length(which(malaria))) %>%
+  ungroup %>%
+  filter(!is.na(spray_status))
+left <- expand.grid(date = seq(as.Date('2016-12-01'), 
+                              max(x$date),
+                              by = 1),
+                    spray_status = sort(unique(x$spray_status)))
+x <- left_join(left,
+               x)
+x$new_cases[is.na(x$new_cases)] <- 0
+x <- x %>% filter(!is.na(spray_status))  
+
+# Join denominators
+x <- x %>%
+  left_join(by_ss)
+
+x <- x %>%
+  dplyr::arrange(date) %>%
+  dplyr::group_by(spray_status) %>%
+  dplyr::mutate(cumulative_new_cases = cumsum(new_cases),
+            cumulative_children_at_risk = cumsum(children)) %>%
+  ungroup %>%
+  mutate(month = date_truncate(date, 'month')) %>%
+  group_by(month) %>%
+  filter(date == max(date)) %>%
+  ungroup %>%
+  rename(children_at_risk = children) %>%
+  group_by(month) %>%
+  # filter(n() == 2) %>%
+  summarise(cases_spray = cumulative_new_cases[spray_status == 'Spray'],
+            cases_no_spray = cumulative_new_cases[spray_status == 'No spray'],
+            at_risk_spray = cumulative_children_at_risk[spray_status == 'Spray'],
+            at_risk_no_spray = cumulative_children_at_risk[spray_status == 'No spray'])
+# Calculate odds ratios and confidence intervals
+x$rr <- x$lower <- x$upper <- x$p <- NA
+for (i in 1:nrow(x)){
+  tab <- matrix(as.numeric(x[i,2:5]), nrow = 2)
+  out <- epitab(tab,method="oddsratio")$tab
+  x$rr[i] <- out[,colnames(out) == 'oddsratio'][2]
+  x$lower[i] <- out[,colnames(out) == 'lower'][2]
+  x$upper[i] <- out[,colnames(out) == 'upper'][2]
+  x$p[i] <- out[,colnames(out) == 'p.value'][2]
+}
+
+ggplot(data = x,
+       aes(x = month,
+           y = rr)) +
+  geom_point() +
+  geom_linerange(aes(ymax = upper,
+                     ymin = lower)) +
+  theme_mopeia() +
+  labs(x = '',
+       y = 'odds ratios') +
+  scale_x_date(breaks = sort(unique(x$month)),
+               date_labels = '%b') +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = 1,
+             color = 'red')
+```
+
+    
+### Cumulative odds ratios from PCD (spray relative to no spray) table
+
+```{r}
+prettify(x)
+```
+
+  
+
+
+Details
+=====================================  
+
+Row
+-------------------------------------
+  
+
+### Data management
+
+```{r}
+valueBox('Eldo Elobolobo', icon = "fa-database",
+         href="mailto:eldo.elobolobo@manhica.net?Subject=Mopeia%20dashboard")
+```
+
+### Visualization
+
+```{r}
+valueBox('Joe Brew', icon = "fa-eye",
+         href="mailto:joe@databrew.cc?Subject=Mopeia%20dashboard")
+```
+
+### Implementation and analysis
+
+```{r}
+valueBox('Carlos Chaccour', icon = "fa-stethoscope",
+         href="mailto:carlos.chaccour@isglobal.org?Subject=Mopeia%20dashboard")
+```
+
+
+Row
+-------------------------------------
+  
+
+### Coordinating institution
+
+```{r}
+valueBox('Centro de Investigação em Saude de Manhiça', icon = "fa-users",
+         href="http://www.manhica.org/wp/en/home-en/", color = 'danger')
+```
+
+Row
+-------------------------------------
+  
+
+### Collaborating institution
+
+```{r}
+valueBox('Barcelona Institute for Global Health', icon = "fa-group",
+         href="http://www.isglobal.org", color = 'danger')
+```
+
+
+Row
+-------------------------------------
+  
+### Supporting organization
+
+```{r}
+valueBox('DataBrew', icon = "fa-coffee",
+         href="http://www.databrew.cc", color = 'danger')
 ```
