@@ -56,14 +56,14 @@ Row
 ### ACD visits carried out
 
 ```{r}
-valueBox(length(which(visit_dates$visit_done)), icon = "fa-stethoscope")
+valueBox(length(which(visit_dates$visit_done)), icon = "fa-stethoscope", href = "#acd")
 ```
 
 ### Malaria cases detected through ACD
 
 ```{r}
 valueBox(length(which(visit_dates$malaria)), icon = "fa-flag",
-         color = 'info')
+         color = 'info', href = "#acd")
 ```
 
 ### Children-years observed in ACD
@@ -72,7 +72,7 @@ valueBox(length(which(visit_dates$malaria)), icon = "fa-flag",
 years <- round(nrow(etar) / 365.25)
 valueBox(round(nrow(etar) / 365.25), 
          icon = "fa-binoculars",
-         color = 'warning')
+         color = 'warning', href = "#acd")
 ```
 
 
@@ -82,19 +82,19 @@ Row
 ### PCD visits among 0-4 year olds
 
 ```{r}
-valueBox(nrow(pcd), icon = "fa-vcard", color = 'warning')
+valueBox(nrow(pcd), icon = "fa-vcard", color = 'warning', href = "#pcd")
 ```
 
 ### PCD malaria cases among 0-4 year olds
 
 ```{r}
-valueBox(length(which(pcd$malaria)), icon = "fa-vcard", color = 'danger')
+valueBox(length(which(pcd$malaria)), icon = "fa-vcard", color = 'danger', href = "#pcd")
 ```
 
 ### RDTs administered in PCD to 0-4 year olds
 
 ```{r}
-valueBox(length(which(!is.na(pcd$rdt))), icon = "fa-vcard", color = 'info')
+valueBox(length(which(!is.na(pcd$rdt))), icon = "fa-vcard", color = 'info', href = "#pcd")
 ```
 
 
@@ -1096,7 +1096,7 @@ Row
 
 ```{r}
 valueBox('Centro de Investigação em Saude de Manhiça', icon = "fa-users",
-         href="http://www.manhica.org/wp/en/home-en/", color = 'danger')
+         href="http://www.manhica.org/wp/en/home-en/", color = 'warning')
 ```
 
 Row
@@ -1118,5 +1118,5 @@ Row
 
 ```{r}
 valueBox('DataBrew', icon = "fa-coffee",
-         href="http://www.databrew.cc", color = 'danger')
+         href="http://www.databrew.cc", color = 'info')
 ```
