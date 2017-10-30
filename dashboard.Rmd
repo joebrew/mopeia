@@ -59,7 +59,7 @@ Row
 valueBox(length(which(visit_dates$visit_done)), icon = "fa-stethoscope", href = "#acd")
 ```
 
-### Malaria cases detected through ACD
+### Total malaria infections by RDT detected through ACD
 
 ```{r}
 valueBox(length(which(visit_dates$malaria)), icon = "fa-flag",
@@ -97,6 +97,73 @@ valueBox(length(which(pcd$malaria)), icon = "fa-vcard", color = 'danger', href =
 valueBox(length(which(!is.na(pcd$rdt))), icon = "fa-vcard", color = 'info', href = "#pcd")
 ```
 
+Row
+-------------------------------------
+    
+### ACD heatmap
+
+```{r}
+# for(i in 1:9){
+#   x <- visit_dates %>%
+#   mutate(pid = clean_perm_id(permid)) %>%
+#   # Kepp only last round
+#   filter(round == i) %>%
+#   # Get location
+#   left_join(
+#     master_table %>%
+#       mutate(pid = clean_perm_id(permid)) %>%
+#       dplyr::select(pid, lng, lat)) %>%
+#   mutate(outcome = ifelse(rdt == 'Positive', 1,
+#                           ifelse(rdt == 'Negative', 0, NA))) %>%
+#   filter(!is.na(outcome),
+#          !is.na(lng),
+#          !is.na(lat)) %>%
+#   dplyr::select(lng, lat, outcome)
+# 
+#   assign(paste0('g', i),
+#          heat_map(x))
+# }
+x <- visit_dates %>%
+  mutate(pid = clean_perm_id(permid)) %>%
+  # # Kepp only last round
+  filter(round == max(round)) %>%
+  # Get location
+  left_join(
+    master_table %>%
+      mutate(pid = clean_perm_id(permid)) %>%
+      dplyr::select(pid, lng, lat)) %>%
+  mutate(outcome = ifelse(rdt == 'Positive', 1,
+                          ifelse(rdt == 'Negative', 0, NA))) %>%
+  filter(!is.na(outcome),
+         !is.na(lng),
+         !is.na(lat)) %>%
+  dplyr::select(lng, lat, outcome)
+
+heat_map(x) +
+  labs(title = 'Round 9: interpolated positivity')
+```
+
+### PCD heatmap
+
+```{r}
+x <- pcd %>%
+  group_by(village_number = village) %>%
+  summarise(positives = length(which(malaria)),
+            eligibles = length(which(!is.na(malaria)))) %>%
+  ungroup %>%
+  left_join(master_table %>%
+    group_by(village_number) %>%
+    summarise(children = n(),
+              lat = mean(lat),
+              lng = mean(lng),
+              status = ifelse(dplyr::first(status), 'Spray', 'No spray')) 
+) %>%
+  mutate(outcome = positives / eligibles * 100) %>%
+  filter(!is.na(lng), !is.na(lat), !is.na(outcome))
+
+heat_map(x) +
+  labs(title = 'Positivity among clinical visits')
+```
 
     
 Row
@@ -178,10 +245,55 @@ x <- x %>%
 prettify(x)
 ```
 
+
+  
+Row
+-------------------------------------
+    
+### Round-specific raw numbers figure
+
+```{r}
+# ACD ########################
+# Round Incidence (seven of them)
+# (# of RDT+ that round* / # of children in cohort that round)
+#   * Round: equals visits of ACD. We are currently at the end of the 8th monthly follow up
+x <- visit_dates %>%
+  group_by(round) %>%
+  summarise(positives = length(which(malaria)),
+            tested = length(!is.na(malaria))) %>%
+  ungroup %>%
+  mutate(percent_positive = positives / tested * 100) %>%
+  mutate(Tests = tested) %>%
+  dplyr::select(-tested)
+
+x <- x %>%
+  gather(key, value, percent_positive:Tests )
+
+ggplot(data = x,
+       aes(x = round,
+           y = value,
+           color = key)) +
+  geom_line(alpha = 0.7) +
+  geom_point(alpha = 0.6) +
+  labs(x = 'Round',
+       y = 'Value') +
+  theme_mopeia() +
+  scale_x_continuous(breaks = 1:max(x$round))
+```
+
+### Round-specific raw numbers table
+
+```{r}
+x <- x %>%
+  dplyr::select(round, positives, key, value)
+prettify(x)
+```
+
+
 Row
 -------------------------------------
    
-### Round incidence by spray status figure
+### RDT positivity by spray status figure
 
 ```{r}
 # ACD ########################
@@ -213,8 +325,7 @@ ggplot(data = x,
                      values = c('darkorange', 'blue'))
 ```
 
-### Round incidence by spray status table
-
+### RDT positivity by spray status table
 
 ```{r}
 x <- x %>%
@@ -251,7 +362,7 @@ x <- etar %>%
 # x <- x %>%
 #   mutate(cumulative_incidence = cumulative_new_cases / denom)
 
-ggplot(data = x %>% filter(date >= '2017-01-31'),
+ggplot(data = x %>% dplyr::filter(date >= as.Date('2017-02-28')),
        aes(x = date,
            y = cumulative_incidence)) +
   geom_line() +
@@ -295,7 +406,7 @@ x <- etar %>%
   # ungroup %>%
   # mutate(cumulative_incidence = cumulative_new_cases / denom)
 
-ggplot(data = x %>% filter(date >= '2017-01-31'),
+ggplot(data = x %>% filter(date >= '2017-02-28'),
        aes(x = date,
            y = cumulative_incidence,
            color = spray_status)) +
@@ -341,7 +452,7 @@ x <- etar %>%
          cumulative_children_at_risk = cumsum(children_at_risk)) %>%
   mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25))
 
-ggplot(data = x %>% filter(date >= '2017-01-31'),
+ggplot(data = x %>% filter(date >= '2017-02-28'),
        aes(x = date,
            y = cumulative_incidence,
            color = spray_status)) +
@@ -392,7 +503,7 @@ x <- x %>%
          cumulative_children_at_risk = cumsum(children_at_risk)) %>%
   mutate(cumulative_incidence = cumulative_new_cases / (cumulative_children_at_risk / 365.25))
 
-ggplot(data = x %>% filter(date >= '2017-01-31'),
+ggplot(data = x %>% filter(date >= '2017-02-28'),
        aes(x = date,
            y = cumulative_incidence,
            color = spray_status)) +
@@ -449,7 +560,10 @@ x <- etar %>%
   # ungroup %>%
   # mutate(cumulative_incidence = cumulative_new_cases / denom)
 
-ggplot(data = x %>% filter(date >= '2017-01-31'),
+g <- ggplot(data = x %>% filter(date >= '2017-02-28') %>%
+              group_by(month = date_truncate(date, level = 'month'), spray_status) %>%
+              filter(date == max(date)) %>%
+              ungroup ,
        aes(x = date,
            y = cumulative_incidence,
            color = bednet)) +
@@ -463,6 +577,8 @@ ggplot(data = x %>% filter(date >= '2017-01-31'),
   theme(axis.text.x = element_text(angle = 90)) +
   theme(strip.text.x = element_text(size = 8)) +
   scale_y_log10()
+library(plotly)
+ggplotly(g)
 ```
 
 ### Cumulative incidence by spray status and net usage (using variable `main_malaria_control_undernet_sleep`), no denominator removals table

@@ -1,4 +1,4 @@
-get_new <- TRUE
+get_new <- FALSE
 library(devtools)
 library(tidyverse)
 if(!require('cism')){
@@ -77,7 +77,7 @@ visit_dates <-
     getdob,
     cluster,
     dplyr::contains('round')) %>%
-  tidyr::gather(key, value, round1:round7_rdt) 
+  tidyr::gather(key, value, round1:round9_rdt) 
 
 
 # Get the visit number
@@ -393,3 +393,64 @@ pcd <- pcd %>% filter(!is.na(health_facility))
 #     (Pooled # of RDT+ in children <5 that month/ all RDTs performed in children <5 that month)
 #       Mopeia map of RDT positivity rate by age <5 and >5
 
+
+# Define function for making heat map
+heat_map <- function(x){
+  library(akima)
+  fld <- with(x, interp(x = lng, 
+                        y = lat, 
+                        z = outcome,
+                        xo = seq(min(mop2_fortified$long), 
+                                 max(mop2_fortified$long), 
+                                 length=100),
+                        yo = seq(min(mop2_fortified$lat), 
+                                 max(mop2_fortified$lat), 
+                                 length=100),
+                        linear = FALSE,
+                        extrap = TRUE,
+                        duplicate="mean",
+                        nx = 100,
+                        ny = 100))
+  y <- interp2xyz(fld, data.frame=TRUE)
+  # Keep only those in mop2
+  ysp <- y
+  coordinates(ysp)<- ~x+y
+  proj4string(ysp) <- proj4string(mop2)
+  overs <- over(ysp, polygons(mop2))
+  y <- y[!is.na(overs),]
+  y$z <- ifelse(y$z < 0, 0, 
+                ifelse(y$z > 100, 100, y$z))
+  # y$z[is.na(y$z)] <- mean(y$z, na.rm = TRUE)
+  ggplot(data = y,
+         aes(x = x, y = y, z = z)) + 
+    geom_tile(aes(fill=z)) + 
+    # coord_equal() +
+    theme_map() +
+    stat_contour(aes(fill=..level..), 
+                 binwidth = 20,
+                 # binwidth=0.005, 
+                 geom="polygon") + 
+    # geom_contour(color="white", alpha=0.5) +
+    scale_fill_distiller(name = 'Positivity', palette="Spectral", na.value="white") + 
+    theme_bw() +
+    labs(x = 'Longitude',
+         y = 'Latitude') +
+    geom_polygon(data = mop2_fortified,
+                 aes(x = long,
+                     y = lat,
+                     group = group, z= NA),
+                 fill = NA,
+                 color = 'black')
+  }
+
+#Clean perm id
+clean_perm_id <- function(x){
+  xl <- strsplit(x, '-')
+  xo <- lapply(xl, function(x){
+    as.numeric(x)
+  })
+  xz <- lapply(xo, function(x){
+    paste0(unlist(x), collapse = '-')
+  })
+  return(unlist(xz))
+}
