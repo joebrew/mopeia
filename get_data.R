@@ -10,7 +10,7 @@ library(cism)
 # If we've already downloaded data today, don't redownload
 # Check by saying if there is a dated backup for today
 if(!get_new){
-  today <- max(as.Date(gsub('data_|.RData', '', dir('backups/'))))
+  today <- max(as.Date(gsub('data_|.RData', '', dir('backups/'))), na.rm = TRUE)
   message('Using data from ', today)
 } else {
   today <- Sys.Date()
@@ -62,7 +62,7 @@ if(file_name %in% dir('backups')){
 
 # Read the table with the visit date, etc.
 # (to be sent by email from Eldo monthly)
-visit_dates <- read_csv('supplementary_data/Controle_de_visitas.csv')
+visit_dates <- read_csv('supplementary_data/controle_de_visitas_round11.csv')
 # Clean up column names
 names(visit_dates) <-
   gsub('part_info/|getpart_|part_|get_', '', names(visit_dates))
@@ -77,7 +77,7 @@ visit_dates <-
     getdob,
     cluster,
     dplyr::contains('round')) %>%
-  tidyr::gather(key, value, round1:round9_rdt) 
+  tidyr::gather(key, value, round1:round11_rdt)  # this always needs to be updated
 
 
 # Get the visit number
@@ -97,6 +97,9 @@ visit_dates <-
 
 # Spread out
 visit_dates <- visit_dates %>%
+  group_by(family_id, permid, getdob, cluster, key, visit_number) %>%
+  summarise(value = dplyr::first(value)) %>%
+  ungroup %>% 
   spread(key = key,
          value = value)
 
