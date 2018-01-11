@@ -130,15 +130,25 @@ perm_id_corrections <- read_csv('supplementary_data/COST_Permids.New&Old_EE.csv'
 visit_dates <-
   visit_dates %>%
   dplyr::rename(new_permid = permid,
-                new_family_id = family_id) %>%
-  left_join(perm_id_corrections %>% 
-              dplyr::rename(cluster_corrected = cluster))
+                new_family_id = family_id,
+                old_cluster = cluster) %>%
+  left_join(perm_id_corrections)
 
 visit_dates$permid <- visit_dates$new_permid
 visit_dates$family_id <- visit_dates$new_family_id
 # Read in geogrpahic and demographic data
 # (need to get this in relative path)
 master_table <- readr::read_csv("~/Documents/zambezia/master_table_for_carlos.csv")
+# master_table <-
+#   left_join(master_table %>%
+#               dplyr::select(-cluster,
+#                             -gender) %>%
+#               mutate(permid = clean_perm_id(permid)) %>%
+#               dplyr::rename(original_name = name),
+#             perm_id_corrections %>%
+#                 mutate(old_permid = clean_perm_id(old_permid)),
+#             by = c('permid' = 'old_permid'))
+
 
 # Get spray status
 ss <- master_table %>% 
