@@ -134,8 +134,8 @@ visit_dates <-
                 old_cluster = cluster) %>%
   left_join(perm_id_corrections)
 
-visit_dates$permid <- visit_dates$new_permid
-visit_dates$family_id <- visit_dates$new_family_id
+visit_dates$permid <- visit_dates$old_permid
+visit_dates$family_id <- visit_dates$old_family_id
 # Read in geogrpahic and demographic data
 # (need to get this in relative path)
 master_table <- readr::read_csv("~/Documents/zambezia/master_table_for_carlos.csv")
@@ -154,7 +154,7 @@ master_table <- readr::read_csv("~/Documents/zambezia/master_table_for_carlos.cs
 ss <- master_table %>% 
   dplyr::filter(!is.na(status)) %>%
   dplyr::group_by(village_number) %>%
-  dplyr::summarise(spray_status = dplyr::first(status)) 
+  dplyr::summarise(spray_status = dplyr::first(!is.na(status))) 
 ss <- ss %>%
   dplyr::mutate(spray_status = ifelse(spray_status, 'Spray', 'No spray'))
 
