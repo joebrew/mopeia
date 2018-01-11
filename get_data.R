@@ -123,6 +123,19 @@ visit_dates$malaria <- ifelse(visit_dates$rdt == 'Positive', TRUE,
                               ifelse(visit_dates$rdt == 'Negative', FALSE, NA))
 visit_dates$round <- visit_dates$visit_number
 
+# Replace the perm_id in "visit_dates" with the correct one
+# Per Eldo, the "old_permid" should match with the permid in the census for each person.
+perm_id_corrections <- read_csv('supplementary_data/COST_Permids.New&Old_EE.csv') %>%
+  filter(!duplicated(new_permid))
+visit_dates <-
+  visit_dates %>%
+  dplyr::rename(new_permid = permid,
+                new_family_id = family_id) %>%
+  left_join(perm_id_corrections %>% 
+              dplyr::rename(cluster_corrected = cluster))
+
+visit_dates$permid <- visit_dates$new_permid
+visit_dates$family_id <- visit_dates$new_family_id
 # Read in geogrpahic and demographic data
 # (need to get this in relative path)
 master_table <- readr::read_csv("~/Documents/zambezia/master_table_for_carlos.csv")
