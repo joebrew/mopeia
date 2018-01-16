@@ -149,21 +149,6 @@ cvss <- read_csv('supplementary_data/COST_Clusters.Villages.Spray_Status.csv')
 perm_id_corrections <- read_csv('supplementary_data/COST_Permids.New&Old_EE.csv') %>%
   filter(!duplicated(new_permid))
 
-# We want EVERYTHING to use new permid
-# so we don't have to do any of the below.
-# instead, we need to change the permid in the census
-# visit_dates <-
-#   visit_dates %>%
-#   dplyr::rename(new_permid = permid,
-#                 new_family_id = family_id,
-#                 old_cluster = cluster) %>%
-#   left_join(perm_id_corrections)
-# 
-# visit_dates$permid <- visit_dates$old_permid
-# visit_dates$family_id <- visit_dates$old_family_id
-# Read in geogrpahic and demographic data
-# (need to get this in relative path)
-
 # Get the correct permid in in visit_dates
 visit_dates <-
   left_join(visit_dates %>%
@@ -227,9 +212,13 @@ acd$date <- as.Date(substr(acd$start, 1, 10))
 #   mutate(village_number = as.numeric(unlist(lapply(strsplit(permid, '-'), function(x){x[2]})))) %>%
 #   left_join(ss,
 #             by = 'village_number')
+
+cvss$Clusters <- as.numeric(cvss$Clusters)
+
 visit_dates <- visit_dates %>%
   left_join(cvss %>%
-              dplyr::rename(cluster = Clusters)) %>%
+              dplyr::rename(cluster = Clusters) %>%
+              dplyr::filter(!duplicated(cluster))) %>%
   mutate(spray_status = Spray_status)
 
 # Fix likely broken dates

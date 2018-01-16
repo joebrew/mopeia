@@ -826,16 +826,19 @@ Row
 
 ```{r}
 x <- pcd %>%
+  mutate(spray_status = ifelse(is.na(spray_status),
+                               'Unknown',
+                               spray_status)) %>%
+  mutate(spray_status = ifelse(spray_status == 'N/A',
+                               'Unknown',
+                               spray_status)) %>%
   dplyr::mutate(month = date_truncate(date, level = 'month')) %>%
   dplyr::group_by(month, spray_status) %>%
   dplyr::summarise(cases = length(which(malaria)),
             valid_tests = length(which(!is.na(rdt))),
             visits = n()) %>%
   ungroup %>%
-  dplyr::filter(month >= '2016-12-01') %>%
-  mutate(spray_status = ifelse(is.na(spray_status),
-                               'Unknown',
-                               spray_status))
+  dplyr::filter(month >= '2016-12-01') 
 
 ggplot(data = x,
        aes(x = month,
@@ -870,16 +873,19 @@ Row
 
 ```{r}
 x <- pcd %>%
+    mutate(spray_status = ifelse(is.na(spray_status),
+                               'Unknown',
+                               spray_status)) %>%
+  mutate(spray_status = ifelse(spray_status == 'N/A',
+                               'Unknown',
+                               spray_status)) %>%
   dplyr::mutate(month = date_truncate(date, level = 'month')) %>%
   dplyr::group_by(month, spray_status) %>%
   dplyr::summarise(cases = length(which(malaria)),
             valid_tests = length(which(!is.na(rdt))),
             visits = n()) %>%
   ungroup %>%
-  dplyr::filter(month >= '2016-12-01') %>%
-  mutate(spray_status = ifelse(is.na(spray_status),
-                               'Unknown',
-                               spray_status)) %>%
+  dplyr::filter(month >= '2016-12-01')  %>% 
   arrange(month) %>%
   group_by(spray_status) %>%
   mutate(cumulative_cases = cumsum(cases)) %>%
@@ -926,9 +932,9 @@ library("epitools")
 x <- visit_dates %>%
   group_by(round) %>%
   summarise(cases_spray = length(which(malaria[spray_status == 'Spray'])),
-            cases_no_spray = length(which(malaria[spray_status == 'No spray'])),
+            cases_no_spray = length(which(malaria[spray_status == 'No_Spray'])),
             at_risk_spray = length(malaria[spray_status == 'Spray']),
-            at_risk_no_spray = length(malaria[spray_status == 'No spray']))
+            at_risk_no_spray = length(malaria[spray_status == 'No_Spray']))
 # Calculate relative risk and confidence intervals
 x$rr <- x$lower <- x$upper <- x$p <- NA
 for (i in 1:nrow(x)){
@@ -1027,9 +1033,9 @@ library("epitools")
 x <- visit_dates %>%
   group_by(round) %>%
   summarise(cases_spray = length(which(malaria[spray_status == 'Spray'])),
-            cases_no_spray = length(which(malaria[spray_status == 'No spray'])),
+            cases_no_spray = length(which(malaria[spray_status == 'No_Spray'])),
             at_risk_spray = length(malaria[spray_status == 'Spray']),
-            at_risk_no_spray = length(malaria[spray_status == 'No spray']))
+            at_risk_no_spray = length(malaria[spray_status == 'No_Spray']))
 
 # Calculate odds ratios and confidence intervals
 x$rr <- x$lower <- x$upper <- x$p <- NA
@@ -1127,7 +1133,7 @@ library("epitools")
 
 # Get denominators
 by_ss <- master_table %>%
-  group_by(spray_status = ifelse(status, 'Spray', 'No spray')) %>%
+  group_by(spray_status = ifelse(status, 'Spray', 'No_Spray')) %>%
   summarise(children = n())
 
 x <- pcd %>%    
@@ -1164,9 +1170,9 @@ x <- x %>%
   group_by(month) %>%
   # filter(n() == 2) %>%
   summarise(cases_spray = sum(new_cases[spray_status == 'Spray']),
-            cases_no_spray = sum(new_cases[spray_status == 'No spray']),
+            cases_no_spray = sum(new_cases[spray_status == 'No_Spray']),
             at_risk_spray = sum(children_at_risk[spray_status == 'Spray']),
-            at_risk_no_spray = sum(children_at_risk[spray_status == 'No spray']))
+            at_risk_no_spray = sum(children_at_risk[spray_status == 'No_Spray']))
 # Calculate odds ratios and confidence intervals
 x$rr <- x$lower <- x$upper <- x$p <- NA
 for (i in 1:nrow(x)){
@@ -1212,7 +1218,7 @@ library("epitools")
 
 # Get denominators
 by_ss <- master_table %>%
-  group_by(spray_status = ifelse(status, 'Spray', 'No spray')) %>%
+  group_by(spray_status = ifelse(status, 'Spray', 'No_Spray')) %>%
   summarise(children = n())
 
 x <- pcd %>%    
@@ -1249,9 +1255,9 @@ x <- x %>%
   group_by(month) %>%
   # filter(n() == 2) %>%
   summarise(cases_spray = cumulative_new_cases[spray_status == 'Spray'],
-            cases_no_spray = cumulative_new_cases[spray_status == 'No spray'],
+            cases_no_spray = cumulative_new_cases[spray_status == 'No_Spray'],
             at_risk_spray = cumulative_children_at_risk[spray_status == 'Spray'],
-            at_risk_no_spray = cumulative_children_at_risk[spray_status == 'No spray'])
+            at_risk_no_spray = cumulative_children_at_risk[spray_status == 'No_Spray'])
 # Calculate odds ratios and confidence intervals
 x$rr <- x$lower <- x$upper <- x$p <- NA
 for (i in 1:nrow(x)){
