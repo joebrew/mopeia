@@ -635,7 +635,14 @@ ggplot(data = b,
     
     
 ```{r}
-prettify(b)
+x <- b
+names(x) <- gsub('adjusted_', 'adj_', names(x))
+names(x) <- gsub('cumulative', 'cum', names(x))
+x <- x %>% dplyr::select(round,
+                         spray_status,
+                         cum_adj_child_years_at_risk,
+                         cum_incidence)
+prettify(x)
 ```
     
 
@@ -697,7 +704,7 @@ g <- ggplot(data = a,
   scale_color_manual(name= '',
                      values = c('darkorange', 'blue')) +
   facet_wrap(~bednet)
-
+g
 
 # Join to etar
 
@@ -735,14 +742,24 @@ g <- ggplot(data = a,
 #   theme(axis.text.x = element_text(angle = 90)) +
 #   theme(strip.text.x = element_text(size = 8)) +
 #   scale_y_log10()
-library(plotly)
-ggplotly(g)
+# library(plotly)
+# ggplotly(g)
 ```
 
 ### Cumulative incidence by spray status and net usage (using variable `main_malaria_control_undernet_sleep`), no denominator removals table
 
 ```{r}
-prettify(a)
+x <- a
+names(x) <- gsub('cumulative', 'cum', names(x))
+names(x) <- gsub('spray_status', 'status', names(x))
+names(x) <- gsub('extrapolated_', '', names(x))
+x <- x %>%
+  dplyr::select(-cum_child_months_at_risk,
+                -child_months_at_risk,
+                -positives,
+                -child_months_at_risk,
+                -child_years_at_risk)
+prettify(x)
 ```
 
 
