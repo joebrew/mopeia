@@ -6,6 +6,18 @@ if(!require('cism')){
 }
 library(cism)
 
+#Clean perm id
+clean_perm_id <- function(x){
+  xl <- strsplit(x, '-')
+  xo <- lapply(xl, function(x){
+    as.numeric(x)
+  })
+  xz <- lapply(xo, function(x){
+    paste0(unlist(x), collapse = '-')
+  })
+  return(unlist(xz))
+}
+
 
 # If we've already downloaded data today, don't redownload
 # Check by saying if there is a dated backup for today
@@ -123,32 +135,49 @@ visit_dates$malaria <- ifelse(visit_dates$rdt == 'Positive', TRUE,
                               ifelse(visit_dates$rdt == 'Negative', FALSE, NA))
 visit_dates$round <- visit_dates$visit_number
 
+
+# According to Eldo
+# Census uses "old_permid"
+# "Controle_de_visitas" uses "new_permid"
+# CROSS Data Set uses - "new_permid"
+# ACD Data Set uses - "new_permid" (We can still have some "old_permids" from the previous months, but we are assessing it through the data cleaning) 
+# Attached i'm sending a csv containing all the clusters and villages from the ACD. anything that differs from this, can be an input error that will be assessed in the cleaning process.
+# Read that final csv
+cvss <- read_csv('supplementary_data/COST_Clusters.Villages.Spray_Status.csv')
 # Replace the perm_id in "visit_dates" with the correct one
 # Per Eldo, the "old_permid" should match with the permid in the census for each person.
 perm_id_corrections <- read_csv('supplementary_data/COST_Permids.New&Old_EE.csv') %>%
   filter(!duplicated(new_permid))
-visit_dates <-
-  visit_dates %>%
-  dplyr::rename(new_permid = permid,
-                new_family_id = family_id,
-                old_cluster = cluster) %>%
-  left_join(perm_id_corrections)
 
-visit_dates$permid <- visit_dates$old_permid
-visit_dates$family_id <- visit_dates$old_family_id
+# We want EVERYTHING to use new permid
+# so we don't have to do any of the below.
+# instead, we need to change the permid in the census
+# visit_dates <-
+#   visit_dates %>%
+#   dplyr::rename(new_permid = permid,
+#                 new_family_id = family_id,
+#                 old_cluster = cluster) %>%
+#   left_join(perm_id_corrections)
+# 
+# visit_dates$permid <- visit_dates$old_permid
+# visit_dates$family_id <- visit_dates$old_family_id
 # Read in geogrpahic and demographic data
 # (need to get this in relative path)
-master_table <- readr::read_csv("~/Documents/zambezia/master_table_for_carlos.csv")
-# master_table <-
-#   left_join(master_table %>%
-#               dplyr::select(-cluster,
-#                             -gender) %>%
-#               mutate(permid = clean_perm_id(permid)) %>%
-#               dplyr::rename(original_name = name),
-#             perm_id_corrections %>%
-#                 mutate(old_permid = clean_perm_id(old_permid)),
-#             by = c('permid' = 'old_permid'))
 
+# Get the correct permid in in visit_dates
+visit_dates <-
+  left_join(visit_dates %>%
+              mutate(id = clean_perm_id(permid)) %>%
+                       dplyr::select(-family_id,
+                                     -cluster),
+            y = perm_id_corrections %>%
+              mutate(id = clean_perm_id(new_permid))) %>%
+  mutate(id = clean_perm_id(old_permid))
+
+master_table <- readr::read_csv("~/Documents/zambezia/master_table_for_carlos.csv") %>%
+  mutate(id = clean_perm_id(permid))
+
+# Now using the "id" column to link visit_dates to master_table
 
 # Get spray status
 ss <- master_table %>% 
@@ -193,11 +222,15 @@ follow_up$had_malaria <- ifelse(follow_up$had_malaria == '1', TRUE,
 acd$date <- as.Date(substr(acd$start, 1, 10))
 
 # Bring spray status into visit_dates
-visit_dates <-
-  visit_dates %>%
-  mutate(village_number = as.numeric(unlist(lapply(strsplit(permid, '-'), function(x){x[2]})))) %>%
-  left_join(ss,
-            by = 'village_number')
+# visit_dates <-
+#   visit_dates %>%
+#   mutate(village_number = as.numeric(unlist(lapply(strsplit(permid, '-'), function(x){x[2]})))) %>%
+#   left_join(ss,
+#             by = 'village_number')
+visit_dates <- visit_dates %>%
+  left_join(cvss %>%
+              dplyr::rename(cluster = Clusters)) %>%
+  mutate(spray_status = Spray_status)
 
 # Fix likely broken dates
 visit_dates <- 
@@ -373,10 +406,15 @@ pcd <- pcd %>%
   mutate(malaria = ifelse(tdr_res == '1', TRUE, FALSE))
 
 # Get spray status
+# pcd <-
+#   left_join(pcd %>% mutate(village = as.numeric(as.character(village))),
+#             ss,
+#             by = c('village' = 'village_number'))
 pcd <-
   left_join(pcd %>% mutate(village = as.numeric(as.character(village))),
-            ss,
-            by = c('village' = 'village_number'))
+            cvss,
+            by = c('village' = 'Village_Code')) %>%
+  mutate(spray_status = Spray_status)
 
 # Keep only 0-4 year olds
 pcd <- pcd %>%
@@ -469,14 +507,3 @@ heat_map <- function(x){
                  color = 'black')
   }
 
-#Clean perm id
-clean_perm_id <- function(x){
-  xl <- strsplit(x, '-')
-  xo <- lapply(xl, function(x){
-    as.numeric(x)
-  })
-  xz <- lapply(xo, function(x){
-    paste0(unlist(x), collapse = '-')
-  })
-  return(unlist(xz))
-}
